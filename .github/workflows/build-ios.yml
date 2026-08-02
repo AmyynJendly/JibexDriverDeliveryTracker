@@ -1,0 +1,46 @@
+name: Build iOS App
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Install XCGen
+      run: brew install xcodegen
+    
+    - name: Generate Xcode project
+      run: xcodegen generate
+    
+    - name: Build with Xcode
+      run: |
+        xcodebuild build \
+          -scheme JibexDriverDeliveryTracker \
+          -configuration Debug \
+          -destination 'generic/platform=iOS Simulator' \
+          -derivedDataPath build
+    
+    - name: Upload build artifacts
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-logs
+        path: build
+    
+    - name: Verify app structure
+      run: |
+        if [ -d "build/Build/Products/Debug-iphonesimulator/JibexDriverDeliveryTracker.app" ]; then
+          echo "✅ App built successfully"
+          ls -la build/Build/Products/Debug-iphonesimulator/JibexDriverDeliveryTracker.app
+        else
+          echo "❌ Build failed"
+          exit 1
+        fi
