@@ -1,46 +1,53 @@
 name: Build iOS App
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main, develop ]
   pull_request:
     branches: [ main, develop ]
 
 jobs:
-  build:
+  build-prod:
     runs-on: macos-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Install XCGen
-      run: brew install xcodegen
-    
-    - name: Generate Xcode project
-      run: xcodegen generate
-    
-    - name: Build with Xcode
-      run: |
-        xcodebuild build \
-          -scheme JibexDriverDeliveryTracker \
-          -configuration Debug \
-          -destination 'generic/platform=iOS Simulator' \
-          -derivedDataPath build
-    
-    - name: Upload build artifacts
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-logs
-        path: build
-    
-    - name: Verify app structure
-      run: |
-        if [ -d "build/Build/Products/Debug-iphonesimulator/JibexDriverDeliveryTracker.app" ]; then
-          echo "✅ App built successfully"
-          ls -la build/Build/Products/Debug-iphonesimulator/JibexDriverDeliveryTracker.app
-        else
-          echo "❌ Build failed"
-          exit 1
-        fi
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install XCGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build production-style simulator app
+        run: |
+          xcodebuild build \
+            -scheme JibexDriverDeliveryTracker \
+            -configuration Release \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build-release
+
+      - name: Package release artifact
+        run: |
+          mkdir -p release-artifact
+          cp -R build-release/Build/Products/Release-iphonesimulator/JibexDriverDeliveryTracker.app release-artifact/
+          zip -r release-app.zip release-artifact
+
+      - name: Upload release artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-app
+          path: release-app.zip
+
+      - name: Verify release output
+        run: |
+          if [ -d "build-release/Build/Products/Release-iphonesimulator/JibexDriverDeliveryTracker.app" ]; then
+            echo "✅ Release build succeeded"
+            ls -la build-release/Build/Products/Release-iphonesimulator/JibexDriverDeliveryTracker.app
+          else
+            echo "❌ Release build failed"
+            exit 1
+          fi
