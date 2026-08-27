@@ -23,13 +23,8 @@ if (!$cours || (int) $cours['formateur_id'] !== $formateurId) {
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'supprimer_cours') {
-    $token = $_POST['_csrf'] ?? '';
-    if (!csrf_verify($token)) {
-        http_response_code(419);
-        die('Session expiree, merci de recharger la page.');
-    }
-
+// Suppression via un simple lien "Supprimer" (requete GET).
+if (($_GET['action'] ?? '') === 'supprimer_cours') {
     (new CoursController())->supprimer($id);
     flash_set('succes', 'Cours supprime avec succes.');
     header('Location: formateur_cours.php');
@@ -70,11 +65,7 @@ require __DIR__ . '/includes/header.php';
     </div>
     <div class="cluster">
         <a href="formateur_cours_modifier.php?id=<?= $id ?>" class="btn btn-outline">Modifier le cours</a>
-        <form method="post" action="formateur_cours_show.php?id=<?= $id ?>" data-confirm="Supprimer definitivement ce cours et tout son contenu ?">
-            <?= csrf_field() ?>
-            <input type="hidden" name="action" value="supprimer_cours">
-            <button type="submit" class="btn btn-danger">Supprimer</button>
-        </form>
+        <a href="formateur_cours_show.php?id=<?= $id ?>&amp;action=supprimer_cours" class="btn btn-danger" data-confirm="Supprimer definitivement ce cours et tout son contenu ?">Supprimer</a>
     </div>
 </div>
 
@@ -105,12 +96,7 @@ require __DIR__ . '/includes/header.php';
                         </div>
                         <div class="cluster">
                             <a href="formateur_module_modifier.php?id=<?= (int) $module['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
-                            <form method="post" action="formateur_module_modifier.php" data-confirm="Supprimer ce module et ses ressources ?">
-                                <?= csrf_field() ?>
-                                <input type="hidden" name="action" value="supprimer">
-                                <input type="hidden" name="id" value="<?= (int) $module['id'] ?>">
-                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                            </form>
+                            <a href="formateur_module_modifier.php?action=supprimer&amp;id=<?= (int) $module['id'] ?>" class="btn btn-danger btn-sm" data-confirm="Supprimer ce module et ses ressources ?">Supprimer</a>
                         </div>
                     </div>
 
@@ -124,12 +110,7 @@ require __DIR__ . '/includes/header.php';
                                     <div class="text-soft" style="font-size:.78rem;"><?= e(type_ressource_label($ressource['type'])) ?></div>
                                 </div>
                                 <a href="formateur_ressource_modifier.php?id=<?= (int) $ressource['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
-                                <form method="post" action="formateur_ressource_modifier.php" data-confirm="Supprimer cette ressource ?">
-                                    <?= csrf_field() ?>
-                                    <input type="hidden" name="action" value="supprimer">
-                                    <input type="hidden" name="id" value="<?= (int) $ressource['id'] ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                                </form>
+                                <a href="formateur_ressource_modifier.php?action=supprimer&amp;id=<?= (int) $ressource['id'] ?>" class="btn btn-danger btn-sm" data-confirm="Supprimer cette ressource ?">Supprimer</a>
                             </div>
                         <?php endforeach; ?>
                         <a href="formateur_ressource_ajouter.php?module_id=<?= (int) $module['id'] ?>" class="btn btn-ghost btn-sm" style="margin-top:8px;">+ Ajouter une ressource</a>

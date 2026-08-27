@@ -11,14 +11,9 @@ if (!a_le_role('administrateur')) {
 
 $utilisateurModel = new Utilisateur();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'supprimer') {
-    $token = $_POST['_csrf'] ?? '';
-    if (!csrf_verify($token)) {
-        http_response_code(419);
-        die('Session expiree, merci de recharger la page.');
-    }
-
-    $idASupprimer = (int) ($_POST['id'] ?? 0);
+// Suppression via un simple lien "Supprimer" (requete GET).
+if (($_GET['action'] ?? '') === 'supprimer') {
+    $idASupprimer = (int) ($_GET['id'] ?? 0);
     if ($idASupprimer === (int) $_SESSION['utilisateur']['id']) {
         flash_set('erreur', 'Vous ne pouvez pas supprimer votre propre compte.');
     } else {
@@ -99,12 +94,7 @@ require __DIR__ . '/includes/header.php';
                         <td class="text-soft"><?= e(format_date($u['date_creation'])) ?></td>
                         <td class="cell-actions">
                             <a href="admin_utilisateur_modifier.php?id=<?= (int) $u['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
-                            <form method="post" action="admin_utilisateurs.php" data-confirm="Supprimer cet utilisateur ?">
-                                <?= csrf_field() ?>
-                                <input type="hidden" name="action" value="supprimer">
-                                <input type="hidden" name="id" value="<?= (int) $u['id'] ?>">
-                                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
-                            </form>
+                            <a href="admin_utilisateurs.php?action=supprimer&amp;id=<?= (int) $u['id'] ?>" class="btn btn-danger btn-sm" data-confirm="Supprimer cet utilisateur ?">Supprimer</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

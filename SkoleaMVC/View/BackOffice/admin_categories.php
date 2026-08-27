@@ -11,14 +11,9 @@ if (!a_le_role('administrateur')) {
 
 $controller = new CategorieController();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'supprimer') {
-    $token = $_POST['_csrf'] ?? '';
-    if (!csrf_verify($token)) {
-        http_response_code(419);
-        die('Session expiree, merci de recharger la page.');
-    }
-
-    $erreur = $controller->supprimer((int) ($_POST['id'] ?? 0));
+// Suppression via un simple lien "Supprimer" (requete GET).
+if (($_GET['action'] ?? '') === 'supprimer') {
+    $erreur = $controller->supprimer((int) ($_GET['id'] ?? 0));
     if ($erreur) {
         flash_set('erreur', $erreur);
     } else {
@@ -64,12 +59,11 @@ require __DIR__ . '/includes/header.php';
                         <td><span class="badge badge-neutre"><?= (int) $cat['nb_cours'] ?></span></td>
                         <td class="cell-actions">
                             <a href="admin_categorie_modifier.php?id=<?= (int) $cat['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
-                            <form method="post" action="admin_categories.php" data-confirm="Supprimer cette categorie ?">
-                                <?= csrf_field() ?>
-                                <input type="hidden" name="action" value="supprimer">
-                                <input type="hidden" name="id" value="<?= (int) $cat['id'] ?>">
-                                <button type="submit" class="btn btn-danger btn-sm" <?= $cat['nb_cours'] > 0 ? 'disabled title="Des cours utilisent encore cette categorie"' : '' ?>>Supprimer</button>
-                            </form>
+                            <?php if ($cat['nb_cours'] > 0): ?>
+                                <button type="button" class="btn btn-danger btn-sm" disabled title="Des cours utilisent encore cette categorie">Supprimer</button>
+                            <?php else: ?>
+                                <a href="admin_categories.php?action=supprimer&amp;id=<?= (int) $cat['id'] ?>" class="btn btn-danger btn-sm" data-confirm="Supprimer cette categorie ?">Supprimer</a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

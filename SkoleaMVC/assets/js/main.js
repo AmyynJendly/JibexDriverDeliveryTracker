@@ -39,8 +39,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 5000);
   });
 
-  document.querySelectorAll('[data-confirm]').forEach(function (el) {
+  document.querySelectorAll('form[data-confirm]').forEach(function (el) {
     el.addEventListener('submit', function (event) {
+      var message = el.getAttribute('data-confirm') || 'Confirmer cette action ?';
+      if (!window.confirm(message)) {
+        event.preventDefault();
+      }
+    });
+  });
+
+  // Meme confirmation pour les liens "supprimer" (requete GET simple).
+  document.querySelectorAll('a[data-confirm]').forEach(function (el) {
+    el.addEventListener('click', function (event) {
       var message = el.getAttribute('data-confirm') || 'Confirmer cette action ?';
       if (!window.confirm(message)) {
         event.preventDefault();

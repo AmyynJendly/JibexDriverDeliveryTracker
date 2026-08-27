@@ -12,15 +12,9 @@ if (!a_le_role('formateur')) {
 $formateurId = (int) $_SESSION['utilisateur']['id'];
 $ressourceController = new RessourceController();
 
-// --- Suppression (formulaire poste depuis formateur_cours_show.php) ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'supprimer') {
-    $token = $_POST['_csrf'] ?? '';
-    if (!csrf_verify($token)) {
-        http_response_code(419);
-        die('Session expiree, merci de recharger la page.');
-    }
-
-    $aSupprimer = $ressourceController->trouverPourFormateur((int) ($_POST['id'] ?? 0), $formateurId);
+// --- Suppression via un simple lien "Supprimer" (requete GET) ---
+if (($_GET['action'] ?? '') === 'supprimer') {
+    $aSupprimer = $ressourceController->trouverPourFormateur((int) ($_GET['id'] ?? 0), $formateurId);
     if (!$aSupprimer) {
         flash_set('erreur', "Cette ressource n'existe pas ou ne vous appartient pas.");
         header('Location: formateur_cours.php');

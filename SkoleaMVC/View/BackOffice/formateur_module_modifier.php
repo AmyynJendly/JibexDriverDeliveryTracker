@@ -12,15 +12,9 @@ if (!a_le_role('formateur')) {
 $formateurId = (int) $_SESSION['utilisateur']['id'];
 $moduleController = new ModuleController();
 
-// --- Suppression (formulaire poste depuis formateur_cours_show.php) ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'supprimer') {
-    $token = $_POST['_csrf'] ?? '';
-    if (!csrf_verify($token)) {
-        http_response_code(419);
-        die('Session expiree, merci de recharger la page.');
-    }
-
-    $aSupprimer = $moduleController->trouverPourFormateur((int) ($_POST['id'] ?? 0), $formateurId);
+// --- Suppression via un simple lien "Supprimer" (requete GET) ---
+if (($_GET['action'] ?? '') === 'supprimer') {
+    $aSupprimer = $moduleController->trouverPourFormateur((int) ($_GET['id'] ?? 0), $formateurId);
     if (!$aSupprimer) {
         flash_set('erreur', "Ce module n'existe pas ou ne vous appartient pas.");
         header('Location: formateur_cours.php');
