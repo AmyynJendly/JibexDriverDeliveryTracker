@@ -164,8 +164,10 @@ final class Utilisateur
         }
 
         if ($recherche !== null && $recherche !== '') {
-            $conditions[] = '(nom LIKE :recherche OR prenom LIKE :recherche OR email LIKE :recherche)';
-            $params[':recherche'] = '%' . $recherche . '%';
+            $conditions[] = '(nom LIKE :recherche_nom OR prenom LIKE :recherche_prenom OR email LIKE :recherche_email)';
+            $params[':recherche_nom'] = '%' . $recherche . '%';
+            $params[':recherche_prenom'] = '%' . $recherche . '%';
+            $params[':recherche_email'] = '%' . $recherche . '%';
         }
 
         $where = $conditions === [] ? '' : 'WHERE ' . implode(' AND ', $conditions);
