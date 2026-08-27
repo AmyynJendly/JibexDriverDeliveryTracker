@@ -1,7 +1,6 @@
 ## PHP / project runtime
-/skolea/config/config.local.php
-/skolea/public/uploads/**
-!/skolea/public/uploads/**/.gitkeep
+/SkoleaMVC/uploads/**
+!/SkoleaMVC/uploads/**/.gitkeep
 *.log
 
 ## OS / editor
