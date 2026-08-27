@@ -25,5 +25,6 @@ $title ??= 'Tableau de bord';
     </div>
 
     <script src="<?= e(asset('js/main.js')) ?>"></script>
+    <script src="<?= e(asset('js/validation.js')) ?>"></script>
 </body>
 </html>

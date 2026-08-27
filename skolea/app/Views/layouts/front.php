@@ -31,5 +31,6 @@ $pageTitle = $title === 'Skolea' ? 'Skolea - Plateforme e-learning' : $title . '
     <?php include __DIR__ . '/../partials/front-footer.php'; ?>
 
     <script src="<?= e(asset('js/main.js')) ?>"></script>
+    <script src="<?= e(asset('js/validation.js')) ?>"></script>
 </body>
 </html>

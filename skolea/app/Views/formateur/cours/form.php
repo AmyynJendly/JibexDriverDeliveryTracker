@@ -27,7 +27,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="categorie_id">Categorie</label>
-                    <select id="categorie_id" name="categorie_id" class="form-control<?= isset($errors['categorie_id']) ? ' is-invalid' : '' ?>">
+                    <select id="categorie_id" name="categorie_id" class="form-control<?= isset($errors['categorie_id']) ? ' is-invalid' : '' ?>" data-rule="required">
                         <option value="">Choisir...</option>
                         <?php foreach ($categories as $cat): ?>
                             <option value="<?= (int) $cat['id'] ?>" <?= (string) ($old['categorie_id'] ?? '') === (string) $cat['id'] ? 'selected' : '' ?>>
