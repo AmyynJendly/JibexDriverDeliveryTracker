@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../../bootstrap.php';
-require_once __DIR__ . '/../../Model/Module.php';
 require_once __DIR__ . '/../../Model/Ressource.php';
-require_once __DIR__ . '/../../Controller/ModuleController.php';
 require_once __DIR__ . '/../../Controller/RessourceController.php';
 
 if (!a_le_role('formateur')) {
@@ -13,9 +11,8 @@ if (!a_le_role('formateur')) {
 
 $formateurId = (int) $_SESSION['utilisateur']['id'];
 $ressourceController = new RessourceController();
-$moduleController = new ModuleController();
 
-// --- Suppression ---
+// --- Suppression (formulaire poste depuis formateur_cours_show.php) ---
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'supprimer') {
     $token = $_POST['_csrf'] ?? '';
     if (!csrf_verify($token)) {
@@ -23,44 +20,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'suppr
         die('Session expiree, merci de recharger la page.');
     }
 
-    $ressource = $ressourceController->trouverPourFormateur((int) ($_POST['id'] ?? 0), $formateurId);
-    if (!$ressource) {
+    $aSupprimer = $ressourceController->trouverPourFormateur((int) ($_POST['id'] ?? 0), $formateurId);
+    if (!$aSupprimer) {
         flash_set('erreur', "Cette ressource n'existe pas ou ne vous appartient pas.");
         header('Location: formateur_cours.php');
         exit;
     }
 
-    $ressourceController->supprimer($ressource['id']);
+    $ressourceController->supprimer($aSupprimer['id']);
     flash_set('succes', 'Ressource supprimee avec succes.');
-    header('Location: formateur_cours_show.php?id=' . $ressource['cours_id']);
+    header('Location: formateur_cours_show.php?id=' . $aSupprimer['cours_id']);
     exit;
 }
 
-// --- Creation ou modification ---
-$id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-$moduleId = isset($_GET['module_id']) ? (int) $_GET['module_id'] : null;
-$estModification = $id !== null;
-$ressource = null;
+$id = (int) ($_GET['id'] ?? 0);
+$ressource = $ressourceController->trouverPourFormateur($id, $formateurId);
 
-if ($estModification) {
-    $ressource = $ressourceController->trouverPourFormateur($id, $formateurId);
-    if (!$ressource) {
-        flash_set('erreur', "Cette ressource n'existe pas ou ne vous appartient pas.");
-        header('Location: formateur_cours.php');
-        exit;
-    }
-    $moduleId = (int) $ressource['module_id'];
-    $module = ['id' => $moduleId, 'titre' => $ressource['module_titre'], 'cours_id' => $ressource['cours_id']];
-} else {
-    $module = $moduleController->trouverPourFormateur($moduleId, $formateurId);
-    if (!$module) {
-        flash_set('erreur', "Ce module n'existe pas ou ne vous appartient pas.");
-        header('Location: formateur_cours.php');
-        exit;
-    }
+if (!$ressource) {
+    flash_set('erreur', "Cette ressource n'existe pas ou ne vous appartient pas.");
+    header('Location: formateur_cours.php');
+    exit;
 }
 
-$old = $ressource ?: [];
+$old = $ressource;
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -76,45 +58,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'contenu' => trim($_POST['contenu'] ?? ''),
         'description' => trim($_POST['description'] ?? ''),
     ];
-    $fichier = $_FILES['fichier'] ?? [];
 
-    $validator = $estModification
-        ? $ressourceController->modifier($id, $data, $fichier)
-        : $ressourceController->creer($moduleId, $data, $fichier);
+    $validator = $ressourceController->modifier($id, $data, $_FILES['fichier'] ?? []);
 
     if ($validator->fails()) {
         $old = $data;
         $errors = $validator->errors();
     } else {
-        flash_set('succes', $estModification ? 'Ressource mise a jour avec succes.' : 'Ressource ajoutee avec succes.');
-        header('Location: formateur_cours_show.php?id=' . $module['cours_id']);
+        flash_set('succes', 'Ressource mise a jour avec succes.');
+        header('Location: formateur_cours_show.php?id=' . $ressource['cours_id']);
         exit;
     }
 }
 
-$pageTitle = $estModification ? 'Modifier la ressource' : 'Ajouter une ressource';
+$pageTitle = 'Modifier la ressource';
 require __DIR__ . '/includes/header.php';
 ?>
 
 <div class="breadcrumb">
     <a href="formateur_cours.php">Mes cours</a> /
-    <a href="formateur_cours_show.php?id=<?= $module['cours_id'] ?>">Cours</a> /
-    <?= $estModification ? 'Modifier la ressource' : 'Ajouter une ressource' ?>
+    <a href="formateur_cours_show.php?id=<?= $ressource['cours_id'] ?>">Cours</a> /
+    Modifier la ressource
 </div>
 
 <div class="card" style="max-width:600px;">
     <div class="card-body">
-        <p class="text-muted" style="margin-top:0;">Module : <strong><?= e($module['titre']) ?></strong></p>
+        <p class="text-muted" style="margin-top:0;">Module : <strong><?= e($ressource['module_titre']) ?></strong></p>
 
-        <form method="post"
-              action="formateur_ressource_form.php<?= $estModification ? '?id=' . $id : '?module_id=' . $moduleId ?>"
+        <form method="post" action="formateur_ressource_modifier.php?id=<?= $id ?>"
               enctype="multipart/form-data" novalidate data-validate>
             <?= csrf_field() ?>
 
             <div class="form-group">
                 <label class="form-label" for="titre">Titre de la ressource</label>
                 <input type="text" id="titre" name="titre" class="form-control<?= isset($errors['titre']) ? ' is-invalid' : '' ?>"
-                       value="<?= old($old, 'titre') ?>" data-rule="required|max:150">
+                       value="<?= old($old, 'titre') ?>" placeholder="Ex : Support de cours PDF" data-rule="required|min:3|max:150">
                 <?php if (isset($errors['titre'])): ?><p class="form-error"><?= e($errors['titre']) ?></p><?php endif; ?>
             </div>
 
@@ -140,19 +118,20 @@ require __DIR__ . '/includes/header.php';
                 <input type="text" id="contenu" name="contenu" class="form-control<?= isset($errors['contenu']) ? ' is-invalid' : '' ?>"
                        value="<?= old($old, 'contenu') ?>" placeholder="https://...">
                 <?php if (isset($errors['contenu'])): ?><p class="form-error"><?= e($errors['contenu']) ?></p><?php endif; ?>
-                <?php if ($estModification && !empty($ressource['contenu'])): ?>
+                <?php if (!empty($ressource['contenu'])): ?>
                     <p class="form-hint">Contenu actuel : <?= e($ressource['contenu']) ?> (laisser vide pour le conserver)</p>
                 <?php endif; ?>
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="description">Description (optionnel)</label>
-                <textarea id="description" name="description" class="form-control" rows="3"><?= old($old, 'description') ?></textarea>
+                <textarea id="description" name="description" class="form-control" rows="3"
+                          placeholder="Un resume de ce que contient cette ressource"><?= old($old, 'description') ?></textarea>
             </div>
 
             <div class="cluster" style="margin-top:8px;">
-                <button type="submit" class="btn btn-primary"><?= $estModification ? 'Enregistrer' : 'Ajouter la ressource' ?></button>
-                <a href="formateur_cours_show.php?id=<?= $module['cours_id'] ?>" class="btn btn-ghost">Annuler</a>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a href="formateur_cours_show.php?id=<?= $ressource['cours_id'] ?>" class="btn btn-ghost">Annuler</a>
             </div>
         </form>
     </div>

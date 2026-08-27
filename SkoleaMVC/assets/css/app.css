@@ -188,6 +188,11 @@ select.form-control { appearance: none; background-image: url("data:image/svg+xm
   font-size: .82rem;
   margin-top: 5px;
 }
+.form-success {
+  color: var(--color-success);
+  font-size: .82rem;
+  margin-top: 5px;
+}
 .form-control.is-invalid { border-color: var(--color-danger); }
 .field-check { display: flex; align-items: center; gap: 8px; }
 .field-check input { width: 17px; height: 17px; }

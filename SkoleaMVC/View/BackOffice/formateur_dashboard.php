@@ -93,7 +93,7 @@ require __DIR__ . '/includes/header.php';
             <h3 style="margin:0 0 4px;">Pret a creer un nouveau cours ?</h3>
             <p class="text-muted" style="margin:0;">Ajoutez un titre, une categorie et commencez a structurer vos modules.</p>
         </div>
-        <a href="formateur_cours_form.php" class="btn btn-primary">Creer un cours</a>
+        <a href="formateur_cours_ajouter.php" class="btn btn-primary">Creer un cours</a>
     </div>
 </div>
 

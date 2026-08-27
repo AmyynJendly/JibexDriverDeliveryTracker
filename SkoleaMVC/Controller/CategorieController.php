@@ -48,7 +48,7 @@ class CategorieController
     private function valider($data, $idActuel)
     {
         $validator = new Validator($data);
-        $validator->required('nom', 'Nom')->max('nom', 100, 'Nom')->max('description', 255, 'Description');
+        $validator->required('nom', 'Nom')->min('nom', 3, 'Nom')->max('nom', 100, 'Nom')->max('description', 255, 'Description');
 
         if (!$validator->fails() && $this->model->nomExists($data['nom'], $idActuel)) {
             $validator->addError('nom', 'Une categorie porte deja ce nom.');

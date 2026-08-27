@@ -63,7 +63,7 @@ class ModuleController
     private function valider($data)
     {
         $validator = new Validator($data);
-        $validator->required('titre', 'Titre')->max('titre', 150, 'Titre');
+        $validator->required('titre', 'Titre')->min('titre', 3, 'Titre')->max('titre', 150, 'Titre');
 
         if ($data['ordre'] !== '') {
             $validator->numeric('ordre', 'Ordre');

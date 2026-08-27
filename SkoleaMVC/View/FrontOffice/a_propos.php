@@ -32,4 +32,20 @@ require __DIR__ . '/includes/header.php';
     </div>
 </section>
 
+<section class="section" id="contact" style="background:var(--color-surface);border-top:1px solid var(--color-border);">
+    <div class="container" style="max-width:760px;text-align:center;">
+        <span class="hero-eyebrow">Contact</span>
+        <h2>Une question ? Ecrivez-nous</h2>
+        <p class="text-muted">
+            Pour toute demande, assistance ou support pedagogique, contactez-nous a :
+            <a href="mailto:contact@skolea.tn" style="color:var(--color-primary);font-weight:600;">contact@skolea.tn</a>
+        </p>
+        <p class="text-muted" style="margin-top:18px;">
+            Skolea - Projet Technologies Web<br>
+            1, 2 rue Andre Ampere - 2083<br>
+            Pole Technologique - El Ghazala
+        </p>
+    </div>
+</section>
+
 <?php require __DIR__ . '/includes/footer.php'; ?>

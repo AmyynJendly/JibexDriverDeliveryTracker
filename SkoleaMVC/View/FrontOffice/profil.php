@@ -90,19 +90,19 @@ require __DIR__ . '/includes/header.php';
                     <div class="form-group">
                         <label class="form-label" for="prenom">Prenom</label>
                         <input type="text" id="prenom" name="prenom" class="form-control<?= isset($errors['prenom']) ? ' is-invalid' : '' ?>"
-                               value="<?= old($old, 'prenom') ?>" data-rule="required|max:80">
+                               value="<?= old($old, 'prenom') ?>" placeholder="Ex : Sonia" data-rule="required|min:3|max:80|alpha">
                         <?php if (isset($errors['prenom'])): ?><p class="form-error"><?= e($errors['prenom']) ?></p><?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="nom">Nom</label>
                         <input type="text" id="nom" name="nom" class="form-control<?= isset($errors['nom']) ? ' is-invalid' : '' ?>"
-                               value="<?= old($old, 'nom') ?>" data-rule="required|max:80">
+                               value="<?= old($old, 'nom') ?>" placeholder="Ex : Trabelsi" data-rule="required|min:3|max:80|alpha">
                         <?php if (isset($errors['nom'])): ?><p class="form-error"><?= e($errors['nom']) ?></p><?php endif; ?>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="bio">Bio</label>
-                    <textarea id="bio" name="bio" class="form-control" rows="3"><?= old($old, 'bio') ?></textarea>
+                    <textarea id="bio" name="bio" class="form-control" rows="3" placeholder="Quelques mots pour vous presenter"><?= old($old, 'bio') ?></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Enregistrer</button>
             </form>
@@ -118,20 +118,20 @@ require __DIR__ . '/includes/header.php';
                 <div class="form-group">
                     <label class="form-label" for="mot_de_passe_actuel">Mot de passe actuel</label>
                     <input type="password" id="mot_de_passe_actuel" name="mot_de_passe_actuel"
-                           class="form-control<?= isset($erreursMotDePasse['mot_de_passe_actuel']) ? ' is-invalid' : '' ?>" data-rule="required">
+                           class="form-control<?= isset($erreursMotDePasse['mot_de_passe_actuel']) ? ' is-invalid' : '' ?>" placeholder="Votre mot de passe actuel" data-rule="required">
                     <?php if (isset($erreursMotDePasse['mot_de_passe_actuel'])): ?><p class="form-error"><?= e($erreursMotDePasse['mot_de_passe_actuel']) ?></p><?php endif; ?>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="mot_de_passe">Nouveau mot de passe</label>
                         <input type="password" id="mot_de_passe" name="mot_de_passe"
-                               class="form-control<?= isset($erreursMotDePasse['mot_de_passe']) ? ' is-invalid' : '' ?>" data-rule="required|min:8">
+                               class="form-control<?= isset($erreursMotDePasse['mot_de_passe']) ? ' is-invalid' : '' ?>" placeholder="8 caracteres minimum" data-rule="required|min:8">
                         <?php if (isset($erreursMotDePasse['mot_de_passe'])): ?><p class="form-error"><?= e($erreursMotDePasse['mot_de_passe']) ?></p><?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="mot_de_passe_confirmation">Confirmation</label>
                         <input type="password" id="mot_de_passe_confirmation" name="mot_de_passe_confirmation"
-                               class="form-control<?= isset($erreursMotDePasse['mot_de_passe_confirmation']) ? ' is-invalid' : '' ?>" data-rule="required|matches:mot_de_passe">
+                               class="form-control<?= isset($erreursMotDePasse['mot_de_passe_confirmation']) ? ' is-invalid' : '' ?>" placeholder="Retapez le nouveau mot de passe" data-rule="required|matches:mot_de_passe">
                         <?php if (isset($erreursMotDePasse['mot_de_passe_confirmation'])): ?><p class="form-error"><?= e($erreursMotDePasse['mot_de_passe_confirmation']) ?></p><?php endif; ?>
                     </div>
                 </div>

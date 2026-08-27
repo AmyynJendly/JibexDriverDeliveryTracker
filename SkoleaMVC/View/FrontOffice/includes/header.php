@@ -32,6 +32,7 @@ $titre = isset($pageTitle) ? $pageTitle . ' - Skolea' : 'Skolea';
                 <a href="mes_cours.php" class="<?= $pageActuelle === 'mes_cours.php' || $pageActuelle === 'suivre_cours.php' ? 'is-active' : '' ?>">Mes cours</a>
             <?php endif; ?>
             <a href="a_propos.php" class="<?= $pageActuelle === 'a_propos.php' ? 'is-active' : '' ?>">A propos</a>
+            <a href="a_propos.php#contact">Contact</a>
 
             <div class="nav-actions nav-actions-mobile">
                 <?php include __DIR__ . '/user-menu.php'; ?>

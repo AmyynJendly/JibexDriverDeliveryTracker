@@ -39,7 +39,7 @@ require __DIR__ . '/includes/header.php';
         <h2 style="margin:0;">Categories de cours</h2>
         <p class="text-muted" style="margin:4px 0 0;"><?= count($categories) ?> categorie(s).</p>
     </div>
-    <a href="admin_categorie_form.php" class="btn btn-primary">Ajouter une categorie</a>
+    <a href="admin_categorie_ajouter.php" class="btn btn-primary">Ajouter une categorie</a>
 </div>
 
 <div class="card">
@@ -63,7 +63,7 @@ require __DIR__ . '/includes/header.php';
                         <td class="text-muted"><?= e($cat['description'] ?? '') ?></td>
                         <td><span class="badge badge-neutre"><?= (int) $cat['nb_cours'] ?></span></td>
                         <td class="cell-actions">
-                            <a href="admin_categorie_form.php?id=<?= (int) $cat['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
+                            <a href="admin_categorie_modifier.php?id=<?= (int) $cat['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
                             <form method="post" action="admin_categories.php" data-confirm="Supprimer cette categorie ?">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="action" value="supprimer">

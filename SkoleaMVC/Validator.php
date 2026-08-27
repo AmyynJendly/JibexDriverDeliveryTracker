@@ -57,6 +57,17 @@ class Validator
         return $this;
     }
 
+    // Uniquement des lettres et des espaces (ex: nom, prenom).
+    public function alpha($field, $label)
+    {
+        $value = $this->value($field);
+        if ($value !== '' && !preg_match('/^[a-zA-ZÀ-ÿ \-]+$/u', $value)) {
+            $this->errors[$field] = "« {$label} » ne doit contenir que des lettres et des espaces.";
+        }
+
+        return $this;
+    }
+
     public function numeric($field, $label)
     {
         $value = $this->value($field);

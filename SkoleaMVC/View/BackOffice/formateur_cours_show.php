@@ -69,7 +69,7 @@ require __DIR__ . '/includes/header.php';
         </div>
     </div>
     <div class="cluster">
-        <a href="formateur_cours_form.php?id=<?= $id ?>" class="btn btn-outline">Modifier le cours</a>
+        <a href="formateur_cours_modifier.php?id=<?= $id ?>" class="btn btn-outline">Modifier le cours</a>
         <form method="post" action="formateur_cours_show.php?id=<?= $id ?>" data-confirm="Supprimer definitivement ce cours et tout son contenu ?">
             <?= csrf_field() ?>
             <input type="hidden" name="action" value="supprimer_cours">
@@ -88,7 +88,7 @@ require __DIR__ . '/includes/header.php';
     <div class="card">
         <div class="card-header">
             <h3 style="margin:0;">Modules</h3>
-            <a href="formateur_module_form.php?cours_id=<?= $id ?>" class="btn btn-primary btn-sm">Ajouter un module</a>
+            <a href="formateur_module_ajouter.php?cours_id=<?= $id ?>" class="btn btn-primary btn-sm">Ajouter un module</a>
         </div>
         <div class="card-body">
             <?php if ($modules === []): ?>
@@ -104,8 +104,8 @@ require __DIR__ . '/includes/header.php';
                             <?php endif; ?>
                         </div>
                         <div class="cluster">
-                            <a href="formateur_module_form.php?id=<?= (int) $module['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
-                            <form method="post" action="formateur_module_form.php" data-confirm="Supprimer ce module et ses ressources ?">
+                            <a href="formateur_module_modifier.php?id=<?= (int) $module['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
+                            <form method="post" action="formateur_module_modifier.php" data-confirm="Supprimer ce module et ses ressources ?">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="action" value="supprimer">
                                 <input type="hidden" name="id" value="<?= (int) $module['id'] ?>">
@@ -123,8 +123,8 @@ require __DIR__ . '/includes/header.php';
                                     <strong style="font-size:.88rem;"><?= e($ressource['titre']) ?></strong>
                                     <div class="text-soft" style="font-size:.78rem;"><?= e(type_ressource_label($ressource['type'])) ?></div>
                                 </div>
-                                <a href="formateur_ressource_form.php?id=<?= (int) $ressource['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
-                                <form method="post" action="formateur_ressource_form.php" data-confirm="Supprimer cette ressource ?">
+                                <a href="formateur_ressource_modifier.php?id=<?= (int) $ressource['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
+                                <form method="post" action="formateur_ressource_modifier.php" data-confirm="Supprimer cette ressource ?">
                                     <?= csrf_field() ?>
                                     <input type="hidden" name="action" value="supprimer">
                                     <input type="hidden" name="id" value="<?= (int) $ressource['id'] ?>">
@@ -132,7 +132,7 @@ require __DIR__ . '/includes/header.php';
                                 </form>
                             </div>
                         <?php endforeach; ?>
-                        <a href="formateur_ressource_form.php?module_id=<?= (int) $module['id'] ?>" class="btn btn-ghost btn-sm" style="margin-top:8px;">+ Ajouter une ressource</a>
+                        <a href="formateur_ressource_ajouter.php?module_id=<?= (int) $module['id'] ?>" class="btn btn-ghost btn-sm" style="margin-top:8px;">+ Ajouter une ressource</a>
                     </div>
                 </div>
             <?php endforeach; ?>

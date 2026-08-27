@@ -9,21 +9,15 @@ if (!a_le_role('administrateur')) {
     exit;
 }
 
-$utilisateurModel = new Utilisateur();
-$id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-$estModification = $id !== null;
-$utilisateur = null;
-
-if ($estModification) {
-    $utilisateur = $utilisateurModel->findById($id);
-    if (!$utilisateur) {
-        flash_set('erreur', 'Utilisateur introuvable.');
-        header('Location: admin_utilisateurs.php');
-        exit;
-    }
+$id = (int) ($_GET['id'] ?? 0);
+$utilisateur = (new Utilisateur())->findById($id);
+if (!$utilisateur) {
+    flash_set('erreur', 'Utilisateur introuvable.');
+    header('Location: admin_utilisateurs.php');
+    exit;
 }
 
-$old = $utilisateur ?: [];
+$old = $utilisateur;
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,59 +36,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'mot_de_passe' => $_POST['mot_de_passe'] ?? '',
     ];
 
-    $controller = new UtilisateurController();
-
-    if ($estModification) {
-        if ($id === (int) $_SESSION['utilisateur']['id'] && $data['role'] !== 'administrateur') {
-            flash_set('erreur', "Vous ne pouvez pas retirer votre propre role d'administrateur.");
-            header('Location: admin_utilisateur_form.php?id=' . $id);
-            exit;
-        }
-
-        $validator = $controller->modifierParAdmin($id, $data);
-
-        if (!$validator->fails() && $id === (int) $_SESSION['utilisateur']['id']) {
-            $_SESSION['utilisateur']['nom'] = $data['nom'];
-            $_SESSION['utilisateur']['prenom'] = $data['prenom'];
-        }
-    } else {
-        $validator = $controller->creerParAdmin($data);
+    if ($id === (int) $_SESSION['utilisateur']['id'] && $data['role'] !== 'administrateur') {
+        flash_set('erreur', "Vous ne pouvez pas retirer votre propre role d'administrateur.");
+        header('Location: admin_utilisateur_modifier.php?id=' . $id);
+        exit;
     }
+
+    $validator = (new UtilisateurController())->modifierParAdmin($id, $data);
 
     if ($validator->fails()) {
         $old = $data;
         $errors = $validator->errors();
     } else {
-        flash_set('succes', $estModification ? 'Utilisateur mis a jour avec succes.' : 'Utilisateur cree avec succes.');
+        if ($id === (int) $_SESSION['utilisateur']['id']) {
+            $_SESSION['utilisateur']['nom'] = $data['nom'];
+            $_SESSION['utilisateur']['prenom'] = $data['prenom'];
+        }
+        flash_set('succes', 'Utilisateur mis a jour avec succes.');
         header('Location: admin_utilisateurs.php');
         exit;
     }
 }
 
-$pageTitle = $estModification ? 'Modifier un utilisateur' : 'Ajouter un utilisateur';
+$pageTitle = 'Modifier un utilisateur';
 require __DIR__ . '/includes/header.php';
 ?>
 
 <div class="breadcrumb">
-    <a href="admin_utilisateurs.php">Utilisateurs</a> / <?= $estModification ? 'Modifier' : 'Ajouter' ?>
+    <a href="admin_utilisateurs.php">Utilisateurs</a> / Modifier
 </div>
 
 <div class="card" style="max-width:640px;">
     <div class="card-body">
-        <form method="post" action="admin_utilisateur_form.php<?= $estModification ? '?id=' . $id : '' ?>" novalidate data-validate>
+        <form method="post" action="admin_utilisateur_modifier.php?id=<?= $id ?>" novalidate data-validate>
             <?= csrf_field() ?>
 
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="prenom">Prenom</label>
                     <input type="text" id="prenom" name="prenom" class="form-control<?= isset($errors['prenom']) ? ' is-invalid' : '' ?>"
-                           value="<?= old($old, 'prenom') ?>" data-rule="required|max:80">
+                           value="<?= old($old, 'prenom') ?>" placeholder="Ex : Sonia" data-rule="required|min:3|max:80|alpha">
                     <?php if (isset($errors['prenom'])): ?><p class="form-error"><?= e($errors['prenom']) ?></p><?php endif; ?>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="nom">Nom</label>
                     <input type="text" id="nom" name="nom" class="form-control<?= isset($errors['nom']) ? ' is-invalid' : '' ?>"
-                           value="<?= old($old, 'nom') ?>" data-rule="required|max:80">
+                           value="<?= old($old, 'nom') ?>" placeholder="Ex : Trabelsi" data-rule="required|min:3|max:80|alpha">
                     <?php if (isset($errors['nom'])): ?><p class="form-error"><?= e($errors['nom']) ?></p><?php endif; ?>
                 </div>
             </div>
@@ -102,7 +89,7 @@ require __DIR__ . '/includes/header.php';
             <div class="form-group">
                 <label class="form-label" for="email">Email</label>
                 <input type="email" id="email" name="email" class="form-control<?= isset($errors['email']) ? ' is-invalid' : '' ?>"
-                       value="<?= old($old, 'email') ?>" data-rule="required|email">
+                       value="<?= old($old, 'email') ?>" placeholder="exemple@skolea.tn" data-rule="required|email">
                 <?php if (isset($errors['email'])): ?><p class="form-error"><?= e($errors['email']) ?></p><?php endif; ?>
             </div>
 
@@ -117,20 +104,18 @@ require __DIR__ . '/includes/header.php';
 
             <div class="form-group">
                 <label class="form-label" for="bio">Bio (optionnel)</label>
-                <textarea id="bio" name="bio" class="form-control" rows="3"><?= old($old, 'bio') ?></textarea>
+                <textarea id="bio" name="bio" class="form-control" rows="3" placeholder="Quelques mots sur cette personne"><?= old($old, 'bio') ?></textarea>
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="mot_de_passe">
-                    Mot de passe <?= $estModification ? '(laisser vide pour ne pas changer)' : '' ?>
-                </label>
+                <label class="form-label" for="mot_de_passe">Mot de passe (laisser vide pour ne pas changer)</label>
                 <input type="password" id="mot_de_passe" name="mot_de_passe" class="form-control<?= isset($errors['mot_de_passe']) ? ' is-invalid' : '' ?>"
-                       data-rule="<?= $estModification ? 'min:8' : 'required|min:8' ?>" autocomplete="new-password">
+                       placeholder="8 caracteres minimum" data-rule="min:8" autocomplete="new-password">
                 <?php if (isset($errors['mot_de_passe'])): ?><p class="form-error"><?= e($errors['mot_de_passe']) ?></p><?php endif; ?>
             </div>
 
             <div class="cluster" style="margin-top:8px;">
-                <button type="submit" class="btn btn-primary"><?= $estModification ? 'Enregistrer' : 'Creer le compte' ?></button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
                 <a href="admin_utilisateurs.php" class="btn btn-ghost">Annuler</a>
             </div>
         </form>

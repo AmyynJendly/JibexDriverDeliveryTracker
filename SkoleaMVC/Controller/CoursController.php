@@ -71,6 +71,12 @@ class CoursController
         $this->model->delete($id);
     }
 
+    // Affiche les informations d'un cours (objet Cours) passe en parametre.
+    public function afficherCours($cours)
+    {
+        $cours->show();
+    }
+
     public function appartientAuFormateur($coursId, $formateurId)
     {
         return $this->model->appartientAuFormateur($coursId, $formateurId);
@@ -80,7 +86,7 @@ class CoursController
     {
         $validator = new Validator($data);
         $validator
-            ->required('titre', 'Titre')->max('titre', 150, 'Titre')
+            ->required('titre', 'Titre')->min('titre', 3, 'Titre')->max('titre', 150, 'Titre')
             ->required('description', 'Description')
             ->required('categorie_id', 'Categorie')->numeric('categorie_id', 'Categorie')
             ->required('niveau', 'Niveau')->in('niveau', ['debutant', 'intermediaire', 'avance'], 'Niveau')

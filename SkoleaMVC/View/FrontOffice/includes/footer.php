@@ -21,6 +21,7 @@
                     <a href="index.php">Accueil</a>
                     <a href="cours.php">Catalogue des cours</a>
                     <a href="a_propos.php">A propos</a>
+                    <a href="a_propos.php#contact">Contact</a>
                 </div>
                 <div>
                     <h5>Compte</h5>

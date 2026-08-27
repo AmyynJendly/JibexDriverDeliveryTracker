@@ -15,14 +15,15 @@ $pageActuelle = basename($_SERVER['PHP_SELF']);
         <?php if ($utilisateur['role'] === 'administrateur'): ?>
             <div class="nav-section">Administration</div>
             <a href="admin_dashboard.php" class="<?= $pageActuelle === 'admin_dashboard.php' ? 'is-active' : '' ?>">Tableau de bord</a>
-            <a href="admin_utilisateurs.php" class="<?= in_array($pageActuelle, ['admin_utilisateurs.php', 'admin_utilisateur_form.php'], true) ? 'is-active' : '' ?>">Utilisateurs</a>
-            <a href="admin_categories.php" class="<?= in_array($pageActuelle, ['admin_categories.php', 'admin_categorie_form.php'], true) ? 'is-active' : '' ?>">Categories de cours</a>
+            <a href="admin_utilisateurs.php" class="<?= in_array($pageActuelle, ['admin_utilisateurs.php', 'admin_utilisateur_ajouter.php', 'admin_utilisateur_modifier.php'], true) ? 'is-active' : '' ?>">Utilisateurs</a>
+            <a href="admin_categories.php" class="<?= in_array($pageActuelle, ['admin_categories.php', 'admin_categorie_ajouter.php', 'admin_categorie_modifier.php'], true) ? 'is-active' : '' ?>">Categories de cours</a>
             <a href="admin_statistiques.php" class="<?= $pageActuelle === 'admin_statistiques.php' ? 'is-active' : '' ?>">Statistiques</a>
         <?php elseif ($utilisateur['role'] === 'formateur'): ?>
             <div class="nav-section">Espace formateur</div>
             <a href="formateur_dashboard.php" class="<?= $pageActuelle === 'formateur_dashboard.php' ? 'is-active' : '' ?>">Tableau de bord</a>
-            <a href="formateur_cours.php" class="<?= in_array($pageActuelle, ['formateur_cours.php', 'formateur_cours_form.php', 'formateur_cours_show.php', 'formateur_module_form.php', 'formateur_ressource_form.php'], true) ? 'is-active' : '' ?>">Mes cours</a>
+            <a href="formateur_cours.php" class="<?= in_array($pageActuelle, ['formateur_cours.php', 'formateur_cours_ajouter.php', 'formateur_cours_modifier.php', 'formateur_cours_show.php', 'formateur_module_ajouter.php', 'formateur_module_modifier.php', 'formateur_ressource_ajouter.php', 'formateur_ressource_modifier.php'], true) ? 'is-active' : '' ?>">Mes cours</a>
             <a href="formateur_statistiques.php" class="<?= $pageActuelle === 'formateur_statistiques.php' ? 'is-active' : '' ?>">Statistiques</a>
+            <a href="formateur_demo_poo.php" class="<?= in_array($pageActuelle, ['formateur_demo_poo.php', 'formateur_demo_verification.php'], true) ? 'is-active' : '' ?>">Demonstration POO</a>
         <?php endif; ?>
 
         <div class="nav-section">Compte</div>

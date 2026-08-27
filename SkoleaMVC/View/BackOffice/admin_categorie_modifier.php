@@ -9,21 +9,15 @@ if (!a_le_role('administrateur')) {
     exit;
 }
 
-$categorieModel = new Categorie();
-$id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-$estModification = $id !== null;
-$categorie = null;
-
-if ($estModification) {
-    $categorie = $categorieModel->find($id);
-    if (!$categorie) {
-        flash_set('erreur', 'Categorie introuvable.');
-        header('Location: admin_categories.php');
-        exit;
-    }
+$id = (int) ($_GET['id'] ?? 0);
+$categorie = (new Categorie())->find($id);
+if (!$categorie) {
+    flash_set('erreur', 'Categorie introuvable.');
+    header('Location: admin_categories.php');
+    exit;
 }
 
-$old = $categorie ?: [];
+$old = $categorie;
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -38,46 +32,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'description' => trim($_POST['description'] ?? ''),
     ];
 
-    $controller = new CategorieController();
-    $validator = $estModification ? $controller->modifier($id, $data) : $controller->creer($data);
+    $validator = (new CategorieController())->modifier($id, $data);
 
     if ($validator->fails()) {
         $old = $data;
         $errors = $validator->errors();
     } else {
-        flash_set('succes', $estModification ? 'Categorie mise a jour avec succes.' : 'Categorie creee avec succes.');
+        flash_set('succes', 'Categorie mise a jour avec succes.');
         header('Location: admin_categories.php');
         exit;
     }
 }
 
-$pageTitle = $estModification ? 'Modifier une categorie' : 'Ajouter une categorie';
+$pageTitle = 'Modifier une categorie';
 require __DIR__ . '/includes/header.php';
 ?>
 
 <div class="breadcrumb">
-    <a href="admin_categories.php">Categories</a> / <?= $estModification ? 'Modifier' : 'Ajouter' ?>
+    <a href="admin_categories.php">Categories</a> / Modifier
 </div>
 
 <div class="card" style="max-width:560px;">
     <div class="card-body">
-        <form method="post" action="admin_categorie_form.php<?= $estModification ? '?id=' . $id : '' ?>" novalidate data-validate>
+        <form method="post" action="admin_categorie_modifier.php?id=<?= $id ?>" novalidate data-validate>
             <?= csrf_field() ?>
 
             <div class="form-group">
                 <label class="form-label" for="nom">Nom de la categorie</label>
                 <input type="text" id="nom" name="nom" class="form-control<?= isset($errors['nom']) ? ' is-invalid' : '' ?>"
-                       value="<?= old($old, 'nom') ?>" data-rule="required|max:100">
+                       value="<?= old($old, 'nom') ?>" placeholder="Ex : Developpement Web" data-rule="required|min:3|max:100">
                 <?php if (isset($errors['nom'])): ?><p class="form-error"><?= e($errors['nom']) ?></p><?php endif; ?>
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="description">Description (optionnel)</label>
-                <textarea id="description" name="description" class="form-control" rows="3"><?= old($old, 'description') ?></textarea>
+                <textarea id="description" name="description" class="form-control" rows="3"
+                          placeholder="Quelques mots pour presenter cette categorie"><?= old($old, 'description') ?></textarea>
             </div>
 
             <div class="cluster" style="margin-top:8px;">
-                <button type="submit" class="btn btn-primary"><?= $estModification ? 'Enregistrer' : 'Creer la categorie' ?></button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
                 <a href="admin_categories.php" class="btn btn-ghost">Annuler</a>
             </div>
         </form>

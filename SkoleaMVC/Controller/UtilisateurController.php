@@ -36,8 +36,8 @@ class UtilisateurController
     {
         $validator = new Validator($data);
         $validator
-            ->required('nom', 'Nom')->max('nom', 80, 'Nom')
-            ->required('prenom', 'Prenom')->max('prenom', 80, 'Prenom')
+            ->required('nom', 'Nom')->min('nom', 3, 'Nom')->max('nom', 80, 'Nom')->alpha('nom', 'Nom')
+            ->required('prenom', 'Prenom')->min('prenom', 3, 'Prenom')->max('prenom', 80, 'Prenom')->alpha('prenom', 'Prenom')
             ->required('email', 'Email')->email('email')->max('email', 150, 'Email')
             ->required('mot_de_passe', 'Mot de passe')->min('mot_de_passe', 8, 'Mot de passe')
             ->matches('mot_de_passe_confirmation', 'mot_de_passe', 'Confirmation du mot de passe');
@@ -109,8 +109,8 @@ class UtilisateurController
     {
         $validator = new Validator($data);
         $validator
-            ->required('nom', 'Nom')->max('nom', 80, 'Nom')
-            ->required('prenom', 'Prenom')->max('prenom', 80, 'Prenom')
+            ->required('nom', 'Nom')->min('nom', 3, 'Nom')->max('nom', 80, 'Nom')->alpha('nom', 'Nom')
+            ->required('prenom', 'Prenom')->min('prenom', 3, 'Prenom')->max('prenom', 80, 'Prenom')->alpha('prenom', 'Prenom')
             ->required('email', 'Email')->email('email')
             ->required('role', 'Role')->in('role', ['administrateur', 'formateur', 'etudiant'], 'Role');
 
@@ -133,8 +133,8 @@ class UtilisateurController
     {
         $validator = new Validator($data);
         $validator
-            ->required('nom', 'Nom')->max('nom', 80, 'Nom')
-            ->required('prenom', 'Prenom')->max('prenom', 80, 'Prenom')
+            ->required('nom', 'Nom')->min('nom', 3, 'Nom')->max('nom', 80, 'Nom')->alpha('nom', 'Nom')
+            ->required('prenom', 'Prenom')->min('prenom', 3, 'Prenom')->max('prenom', 80, 'Prenom')->alpha('prenom', 'Prenom')
             ->max('bio', 500, 'Bio');
 
         if (!$validator->fails()) {

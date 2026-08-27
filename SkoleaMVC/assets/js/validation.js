@@ -9,7 +9,12 @@
     required: 'Ce champ est obligatoire.',
     email: 'Merci de saisir une adresse email valide.',
     numeric: 'Ce champ doit etre un nombre.',
+    alpha: 'Ce champ ne doit contenir que des lettres et des espaces.',
   };
+
+  function isAlpha(value) {
+    return /^[a-zA-ZÀ-ÿ \-]+$/.test(value);
+  }
 
   function parseRules(field) {
     var raw = field.getAttribute('data-rule');
@@ -48,6 +53,10 @@
         error = MESSAGES.numeric;
         break;
       }
+      if (rule.name === 'alpha' && !isAlpha(value)) {
+        error = MESSAGES.alpha;
+        break;
+      }
       if (rule.name === 'min' && value.length < parseInt(rule.arg, 10)) {
         error = 'Ce champ doit contenir au moins ' + rule.arg + ' caracteres.';
         break;
@@ -65,28 +74,31 @@
       }
     }
 
-    showError(field, error);
+    // Champ facultatif laisse vide : pas de message du tout.
+    var succes = error === '' && value !== '';
+    showError(field, error, succes);
     return error === '';
   }
 
-  function showError(field, message) {
+  function showError(field, message, succes) {
     field.classList.toggle('is-invalid', message !== '');
 
     var container = field.closest('.form-group') || field.parentElement;
     var existing = container.querySelector('[data-js-error]');
+    if (existing) existing.remove();
 
-    if (message === '') {
-      if (existing) existing.remove();
-      return;
-    }
+    if (message === '' && !succes) return;
 
-    if (!existing) {
-      existing = document.createElement('p');
-      existing.className = 'form-error';
-      existing.setAttribute('data-js-error', '1');
-      container.appendChild(existing);
+    var feedback = document.createElement('p');
+    feedback.setAttribute('data-js-error', '1');
+    if (message !== '') {
+      feedback.className = 'form-error';
+      feedback.textContent = message;
+    } else {
+      feedback.className = 'form-success';
+      feedback.textContent = 'Correct';
     }
-    existing.textContent = message;
+    container.appendChild(feedback);
   }
 
   function bindForm(form) {

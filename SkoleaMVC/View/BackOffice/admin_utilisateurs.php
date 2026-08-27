@@ -49,7 +49,7 @@ require __DIR__ . '/includes/header.php';
         <h2 style="margin:0;">Utilisateurs</h2>
         <p class="text-muted" style="margin:4px 0 0;"><?= (int) $total ?> compte(s) au total.</p>
     </div>
-    <a href="admin_utilisateur_form.php" class="btn btn-primary">Ajouter un utilisateur</a>
+    <a href="admin_utilisateur_ajouter.php" class="btn btn-primary">Ajouter un utilisateur</a>
 </div>
 
 <div class="card" style="margin-bottom:20px;">
@@ -98,7 +98,7 @@ require __DIR__ . '/includes/header.php';
                         <td><span class="badge badge-primaire"><?= e(role_label($u['role'])) ?></span></td>
                         <td class="text-soft"><?= e(format_date($u['date_creation'])) ?></td>
                         <td class="cell-actions">
-                            <a href="admin_utilisateur_form.php?id=<?= (int) $u['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
+                            <a href="admin_utilisateur_modifier.php?id=<?= (int) $u['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
                             <form method="post" action="admin_utilisateurs.php" data-confirm="Supprimer cet utilisateur ?">
                                 <?= csrf_field() ?>
                                 <input type="hidden" name="action" value="supprimer">

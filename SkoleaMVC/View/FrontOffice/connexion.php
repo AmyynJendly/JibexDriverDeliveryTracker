@@ -71,14 +71,14 @@ require __DIR__ . '/includes/header.php';
             <div class="form-group">
                 <label class="form-label" for="email">Adresse email</label>
                 <input type="email" id="email" name="email" class="form-control<?= isset($errors['email']) ? ' is-invalid' : '' ?>"
-                       value="<?= old($old, 'email') ?>" data-rule="required|email" autocomplete="email">
+                       value="<?= old($old, 'email') ?>" placeholder="exemple@skolea.tn" data-rule="required|email" autocomplete="email">
                 <?php if (isset($errors['email'])): ?><p class="form-error"><?= e($errors['email']) ?></p><?php endif; ?>
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="mot_de_passe">Mot de passe</label>
                 <input type="password" id="mot_de_passe" name="mot_de_passe" class="form-control<?= isset($errors['mot_de_passe']) ? ' is-invalid' : '' ?>"
-                       data-rule="required" autocomplete="current-password">
+                       placeholder="Votre mot de passe" data-rule="required" autocomplete="current-password">
                 <?php if (isset($errors['mot_de_passe'])): ?><p class="form-error"><?= e($errors['mot_de_passe']) ?></p><?php endif; ?>
             </div>
 

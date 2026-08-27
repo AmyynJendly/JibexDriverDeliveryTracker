@@ -13,9 +13,50 @@ class Cours
         INNER JOIN utilisateurs u ON u.id = c.formateur_id
     ";
 
-    public function __construct()
+    // Attributs prives utilises pour representer UN cours en memoire
+    // (constructeur + accesseurs), independamment des methodes d'acces
+    // a la base de donnees ci-dessous.
+    private $titre;
+    private $description;
+    private $categorieId;
+    private $niveau;
+    private $statut;
+
+    public function __construct($titre = null, $description = null, $categorieId = null, $niveau = null, $statut = null)
     {
         $this->pdo = config::getConnexion();
+        $this->titre = $titre;
+        $this->description = $description;
+        $this->categorieId = $categorieId;
+        $this->niveau = $niveau;
+        $this->statut = $statut;
+    }
+
+    public function getTitre() { return $this->titre; }
+    public function setTitre($titre) { $this->titre = $titre; }
+
+    public function getDescription() { return $this->description; }
+    public function setDescription($description) { $this->description = $description; }
+
+    public function getCategorieId() { return $this->categorieId; }
+    public function setCategorieId($categorieId) { $this->categorieId = $categorieId; }
+
+    public function getNiveau() { return $this->niveau; }
+    public function setNiveau($niveau) { $this->niveau = $niveau; }
+
+    public function getStatut() { return $this->statut; }
+    public function setStatut($statut) { $this->statut = $statut; }
+
+    // Affiche les informations de CE cours dans un tableau HTML.
+    public function show()
+    {
+        echo '<table class="table"><tbody>';
+        echo '<tr><th>Titre</th><td>' . htmlspecialchars((string) $this->titre) . '</td></tr>';
+        echo '<tr><th>Description</th><td>' . htmlspecialchars((string) $this->description) . '</td></tr>';
+        echo '<tr><th>Categorie (id)</th><td>' . htmlspecialchars((string) $this->categorieId) . '</td></tr>';
+        echo '<tr><th>Niveau</th><td>' . htmlspecialchars((string) $this->niveau) . '</td></tr>';
+        echo '<tr><th>Statut</th><td>' . htmlspecialchars((string) $this->statut) . '</td></tr>';
+        echo '</tbody></table>';
     }
 
     public function find($id)

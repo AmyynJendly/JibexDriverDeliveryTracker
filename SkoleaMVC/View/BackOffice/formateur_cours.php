@@ -34,7 +34,7 @@ require __DIR__ . '/includes/header.php';
         <h2 style="margin:0;">Mes cours</h2>
         <p class="text-muted" style="margin:4px 0 0;"><?= (int) $total ?> cours au total.</p>
     </div>
-    <a href="formateur_cours_form.php" class="btn btn-primary">Creer un cours</a>
+    <a href="formateur_cours_ajouter.php" class="btn btn-primary">Creer un cours</a>
 </div>
 
 <div class="card" style="margin-bottom:20px;">
@@ -54,7 +54,7 @@ require __DIR__ . '/includes/header.php';
     <div class="empty-state card">
         <h3>Aucun cours pour le moment</h3>
         <p>Creez votre premier cours pour commencer a ajouter des modules.</p>
-        <a href="formateur_cours_form.php" class="btn btn-primary">Creer un cours</a>
+        <a href="formateur_cours_ajouter.php" class="btn btn-primary">Creer un cours</a>
     </div>
 <?php else: ?>
     <div class="grid grid-cols-3">
@@ -74,7 +74,7 @@ require __DIR__ . '/includes/header.php';
                     </div>
                     <div class="card-footer">
                         <a href="formateur_cours_show.php?id=<?= (int) $c['id'] ?>" class="btn btn-primary btn-sm">Gerer</a>
-                        <a href="formateur_cours_form.php?id=<?= (int) $c['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
+                        <a href="formateur_cours_modifier.php?id=<?= (int) $c['id'] ?>" class="btn btn-outline btn-sm">Modifier</a>
                     </div>
                 </div>
             </article>

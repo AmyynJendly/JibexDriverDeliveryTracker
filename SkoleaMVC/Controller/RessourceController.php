@@ -63,7 +63,7 @@ class RessourceController
     {
         $validator = new Validator($data);
         $validator
-            ->required('titre', 'Titre')->max('titre', 150, 'Titre')
+            ->required('titre', 'Titre')->min('titre', 3, 'Titre')->max('titre', 150, 'Titre')
             ->required('type', 'Type')->in('type', ['document', 'video', 'quiz'], 'Type');
 
         $contenu = $data['contenu'] !== '' ? $data['contenu'] : null;
