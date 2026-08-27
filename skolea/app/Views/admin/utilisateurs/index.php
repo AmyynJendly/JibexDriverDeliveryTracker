@@ -37,27 +37,19 @@
                     <th>Utilisateur</th>
                     <th>Email</th>
                     <th>Role</th>
-                    <th>Statut</th>
                     <th>Inscrit le</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <?php if ($utilisateurs === []): ?>
-                    <tr><td colspan="6" class="text-soft">Aucun utilisateur ne correspond a ces criteres.</td></tr>
+                    <tr><td colspan="5" class="text-soft">Aucun utilisateur ne correspond a ces criteres.</td></tr>
                 <?php endif; ?>
                 <?php foreach ($utilisateurs as $u): ?>
                     <tr>
                         <td><?= e($u['prenom'] . ' ' . $u['nom']) ?></td>
                         <td><?= e($u['email']) ?></td>
                         <td><span class="badge badge-primaire"><?= e(role_label($u['role'])) ?></span></td>
-                        <td>
-                            <?php if ($u['statut'] === 'actif'): ?>
-                                <span class="badge badge-succes">Actif</span>
-                            <?php else: ?>
-                                <span class="badge badge-danger">Suspendu</span>
-                            <?php endif; ?>
-                        </td>
                         <td class="text-soft"><?= e(format_date($u['date_creation'])) ?></td>
                         <td class="cell-actions">
                             <a href="<?= e(url('/admin/utilisateurs/' . $u['id'] . '/modifier')) ?>" class="btn btn-outline btn-sm">Modifier</a>

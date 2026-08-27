@@ -43,8 +43,6 @@ final class AuthController extends Controller
 
             if (!$utilisateur || !password_verify($motDePasse, $utilisateur['mot_de_passe'])) {
                 $validator->addError('email', 'Email ou mot de passe incorrect.');
-            } elseif ($utilisateur['statut'] === 'suspendu') {
-                $validator->addError('email', 'Ce compte a ete suspendu. Contactez un administrateur.');
             }
         }
 
@@ -116,7 +114,6 @@ final class AuthController extends Controller
             'email' => $data['email'],
             'mot_de_passe' => password_hash($data['mot_de_passe'], PASSWORD_DEFAULT),
             'role' => 'etudiant',
-            'statut' => 'actif',
         ]);
 
         $utilisateur = $utilisateurModel->findById($id);

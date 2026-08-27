@@ -52,8 +52,8 @@ final class Utilisateur
     public function create(array $data): int
     {
         $stmt = $this->pdo->prepare('
-            INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, role, statut, bio)
-            VALUES (:nom, :prenom, :email, :mot_de_passe, :role, :statut, :bio)
+            INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, role, bio)
+            VALUES (:nom, :prenom, :email, :mot_de_passe, :role, :bio)
         ');
         $stmt->execute([
             'nom' => $data['nom'],
@@ -61,7 +61,6 @@ final class Utilisateur
             'email' => $data['email'],
             'mot_de_passe' => $data['mot_de_passe'],
             'role' => $data['role'] ?? 'etudiant',
-            'statut' => $data['statut'] ?? 'actif',
             'bio' => $data['bio'] ?? null,
         ]);
 
@@ -72,7 +71,7 @@ final class Utilisateur
     {
         $stmt = $this->pdo->prepare('
             UPDATE utilisateurs
-            SET nom = :nom, prenom = :prenom, email = :email, role = :role, statut = :statut, bio = :bio
+            SET nom = :nom, prenom = :prenom, email = :email, role = :role, bio = :bio
             WHERE id = :id
         ');
         $stmt->execute([
@@ -81,7 +80,6 @@ final class Utilisateur
             'prenom' => $data['prenom'],
             'email' => $data['email'],
             'role' => $data['role'],
-            'statut' => $data['statut'],
             'bio' => $data['bio'] ?? null,
         ]);
     }

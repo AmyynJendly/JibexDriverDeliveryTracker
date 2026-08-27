@@ -9,17 +9,17 @@ USE skolea;
 -- -------------------------------------------------------------------------
 -- Utilisateurs
 -- -------------------------------------------------------------------------
-INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, role, statut, bio) VALUES
-('Ben Romdhane', 'Sana',    'admin@skolea.tn',            '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'administrateur', 'actif', 'Responsable de la plateforme Skolea.'),
-('Chaabane',     'Nabil',   'nabil.chaabane@skolea.tn',   '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'formateur',      'actif', 'Developpeur web et formateur PHP/JavaScript depuis 8 ans.'),
-('Meddeb',       'Ines',    'ines.meddeb@skolea.tn',      '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'formateur',      'actif', 'Data scientist, passionnee par la vulgarisation du Machine Learning.'),
-('Krichen',      'Yassine', 'yassine.krichen@skolea.tn',  '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'formateur',      'actif', 'Designer UI/UX et consultant en marketing digital.'),
-('Ferjani',      'Rania',   'rania.ferjani@skolea.tn',    '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       'actif', NULL),
-('Belhadj',      'Omar',    'omar.belhadj@skolea.tn',     '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       'actif', NULL),
-('Trabelsi',     'Salma',   'salma.trabelsi@skolea.tn',   '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       'actif', NULL),
-('Aouadi',       'Mehdi',   'mehdi.aouadi@skolea.tn',     '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       'actif', NULL),
-('Chatti',       'Nour',    'nour.chatti@skolea.tn',      '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       'actif', NULL),
-('Gharbi',       'Amine',   'amine.gharbi@skolea.tn',     '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       'suspendu', NULL);
+INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, role, bio) VALUES
+('Ben Romdhane', 'Sana',    'admin@skolea.tn',            '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'administrateur', 'Responsable de la plateforme Skolea.'),
+('Chaabane',     'Nabil',   'nabil.chaabane@skolea.tn',   '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'formateur',      'Developpeur web et formateur PHP/JavaScript depuis 8 ans.'),
+('Meddeb',       'Ines',    'ines.meddeb@skolea.tn',      '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'formateur',      'Data scientist, passionnee par la vulgarisation du Machine Learning.'),
+('Krichen',      'Yassine', 'yassine.krichen@skolea.tn',  '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'formateur',      'Designer UI/UX et consultant en marketing digital.'),
+('Ferjani',      'Rania',   'rania.ferjani@skolea.tn',    '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       NULL),
+('Belhadj',      'Omar',    'omar.belhadj@skolea.tn',     '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       NULL),
+('Trabelsi',     'Salma',   'salma.trabelsi@skolea.tn',   '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       NULL),
+('Aouadi',       'Mehdi',   'mehdi.aouadi@skolea.tn',     '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       NULL),
+('Chatti',       'Nour',    'nour.chatti@skolea.tn',      '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       NULL),
+('Gharbi',       'Amine',   'amine.gharbi@skolea.tn',     '$2y$12$G0lP4BaaDOewq2udxNPWoefG2R9svFrlHiTl.gNDFKbCeoGIGsIpm', 'etudiant',       NULL);
 
 -- -------------------------------------------------------------------------
 -- Categories

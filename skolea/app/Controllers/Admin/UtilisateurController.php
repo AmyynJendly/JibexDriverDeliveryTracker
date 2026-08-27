@@ -73,7 +73,6 @@ final class UtilisateurController extends Controller
             'email' => $data['email'],
             'mot_de_passe' => password_hash($data['mot_de_passe'], PASSWORD_DEFAULT),
             'role' => $data['role'],
-            'statut' => $data['statut'],
             'bio' => $data['bio'],
         ]);
 
@@ -171,7 +170,6 @@ final class UtilisateurController extends Controller
             'prenom' => (string) $this->input('prenom', ''),
             'email' => (string) $this->input('email', ''),
             'role' => (string) $this->input('role', 'etudiant'),
-            'statut' => (string) $this->input('statut', 'actif'),
             'bio' => (string) $this->input('bio', ''),
             'mot_de_passe' => (string) $this->input('mot_de_passe', ''),
         ];
@@ -181,8 +179,7 @@ final class UtilisateurController extends Controller
             ->required('nom', 'Nom')->max('nom', 80, 'Nom')
             ->required('prenom', 'Prenom')->max('prenom', 80, 'Prenom')
             ->required('email', 'Email')->email('email')
-            ->required('role', 'Role')->in('role', self::ROLES, 'Role')
-            ->required('statut', 'Statut')->in('statut', ['actif', 'suspendu'], 'Statut');
+            ->required('role', 'Role')->in('role', self::ROLES, 'Role');
 
         if ($creation) {
             $validator->required('mot_de_passe', 'Mot de passe')->min('mot_de_passe', 8, 'Mot de passe');

@@ -16,7 +16,6 @@ CREATE TABLE utilisateurs (
     email           VARCHAR(150) NOT NULL UNIQUE,
     mot_de_passe    VARCHAR(255) NOT NULL,
     role            ENUM('administrateur', 'formateur', 'etudiant') NOT NULL DEFAULT 'etudiant',
-    statut          ENUM('actif', 'suspendu') NOT NULL DEFAULT 'actif',
     photo           VARCHAR(255) NULL,
     bio             VARCHAR(500) NULL,
     date_creation   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP

@@ -32,22 +32,13 @@
                 <?php if (isset($errors['email'])): ?><p class="form-error"><?= e($errors['email']) ?></p><?php endif; ?>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="role">Role</label>
-                    <select id="role" name="role" class="form-control">
-                        <?php foreach (['administrateur', 'formateur', 'etudiant'] as $r): ?>
-                            <option value="<?= e($r) ?>" <?= ($old['role'] ?? 'etudiant') === $r ? 'selected' : '' ?>><?= e(role_label($r)) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="statut">Statut</label>
-                    <select id="statut" name="statut" class="form-control">
-                        <option value="actif" <?= ($old['statut'] ?? 'actif') === 'actif' ? 'selected' : '' ?>>Actif</option>
-                        <option value="suspendu" <?= ($old['statut'] ?? '') === 'suspendu' ? 'selected' : '' ?>>Suspendu</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label class="form-label" for="role">Role</label>
+                <select id="role" name="role" class="form-control">
+                    <?php foreach (['administrateur', 'formateur', 'etudiant'] as $r): ?>
+                        <option value="<?= e($r) ?>" <?= ($old['role'] ?? 'etudiant') === $r ? 'selected' : '' ?>><?= e(role_label($r)) ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
 
             <div class="form-group">
