@@ -1,0 +1,16 @@
+## PHP / project runtime
+/skolea/config/config.local.php
+/skolea/public/uploads/**
+!/skolea/public/uploads/**/.gitkeep
+*.log
+
+## OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+## Composer (not used, kept in case of local tooling)
+/vendor/
+composer.lock
