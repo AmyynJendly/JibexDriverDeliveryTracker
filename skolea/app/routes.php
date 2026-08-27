@@ -11,6 +11,8 @@ use App\Controllers\Admin\CategorieController as AdminCategorieController;
 use App\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Controllers\Admin\UtilisateurController as AdminUtilisateurController;
 use App\Controllers\AuthController;
+use App\Controllers\CoursController;
+use App\Controllers\Etudiant\InscriptionController as EtudiantInscriptionController;
 use App\Controllers\Formateur\CoursController as FormateurCoursController;
 use App\Controllers\Formateur\DashboardController as FormateurDashboardController;
 use App\Controllers\Formateur\ModuleController as FormateurModuleController;
@@ -75,3 +77,14 @@ $router->post('/formateur/modules/{moduleId}/ressources/creer', [FormateurRessou
 $router->get('/formateur/ressources/{id}/modifier', [FormateurRessourceController::class, 'edit']);
 $router->post('/formateur/ressources/{id}/modifier', [FormateurRessourceController::class, 'update']);
 $router->post('/formateur/ressources/{id}/supprimer', [FormateurRessourceController::class, 'destroy']);
+
+// --- Catalogue public et inscription ---
+$router->get('/cours', [CoursController::class, 'index']);
+$router->get('/cours/{id}', [CoursController::class, 'show']);
+$router->post('/cours/{id}/inscription', [CoursController::class, 'inscrire']);
+
+// --- Espace etudiant ---
+$router->get('/mes-cours', [EtudiantInscriptionController::class, 'index']);
+$router->get('/mes-cours/{coursId}', [EtudiantInscriptionController::class, 'show']);
+$router->post('/mes-cours/{coursId}/desinscrire', [EtudiantInscriptionController::class, 'desinscrire']);
+$router->post('/mes-cours/{coursId}/modules/{moduleId}/terminer', [EtudiantInscriptionController::class, 'toggleModule']);

@@ -46,30 +46,43 @@ final class Inscription
         $stmt->execute(['id' => $id]);
     }
 
+    private const SELECT_DETAILLEE = "
+        SELECT i.*, c.titre AS cours_titre, c.image AS cours_image, c.niveau,
+               cat.nom AS categorie_nom, u.nom AS formateur_nom, u.prenom AS formateur_prenom,
+               (SELECT COUNT(*) FROM modules m WHERE m.cours_id = c.id) AS nb_modules
+        FROM inscriptions i
+        INNER JOIN cours c ON c.id = i.cours_id
+        INNER JOIN categories cat ON cat.id = c.categorie_id
+        INNER JOIN utilisateurs u ON u.id = c.formateur_id
+    ";
+
     /**
      * Cours suivis par un etudiant, avec les informations du cours et du
      * formateur (jointure sur cours, categories et utilisateurs).
      */
     public function paginateByEtudiant(int $etudiantId, int $limit, int $offset): array
     {
-        $stmt = $this->pdo->prepare('
-            SELECT i.*, c.titre AS cours_titre, c.image AS cours_image, c.niveau,
-                   cat.nom AS categorie_nom, u.nom AS formateur_nom, u.prenom AS formateur_prenom,
-                   (SELECT COUNT(*) FROM modules m WHERE m.cours_id = c.id) AS nb_modules
-            FROM inscriptions i
-            INNER JOIN cours c ON c.id = i.cours_id
-            INNER JOIN categories cat ON cat.id = c.categorie_id
-            INNER JOIN utilisateurs u ON u.id = c.formateur_id
-            WHERE i.etudiant_id = :etudiant_id
-            ORDER BY i.date_inscription DESC
-            LIMIT :limit OFFSET :offset
-        ');
+        $stmt = $this->pdo->prepare(
+            self::SELECT_DETAILLEE . ' WHERE i.etudiant_id = :etudiant_id ORDER BY i.date_inscription DESC LIMIT :limit OFFSET :offset'
+        );
         $stmt->bindValue(':etudiant_id', $etudiantId, PDO::PARAM_INT);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
 
         return $stmt->fetchAll();
+    }
+
+    /**
+     * Meme jointure que paginateByEtudiant() mais pour une seule inscription,
+     * utilisee sur la page de suivi d'un cours.
+     */
+    public function trouverDetailleeParEtudiantEtCours(int $etudiantId, int $coursId): ?array
+    {
+        $stmt = $this->pdo->prepare(self::SELECT_DETAILLEE . ' WHERE i.etudiant_id = :etudiant_id AND i.cours_id = :cours_id');
+        $stmt->execute(['etudiant_id' => $etudiantId, 'cours_id' => $coursId]);
+
+        return $stmt->fetch() ?: null;
     }
 
     public function countByEtudiant(int $etudiantId): int
