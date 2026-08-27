@@ -1,5 +1,4 @@
 <?php
-/** @var string $content */
 $title ??= 'Skolea';
 $pageTitle = $title === 'Skolea' ? 'Skolea - Plateforme e-learning' : $title . ' - Skolea';
 ?>
@@ -17,11 +16,11 @@ $pageTitle = $title === 'Skolea' ? 'Skolea - Plateforme e-learning' : $title . '
     <?php include __DIR__ . '/../partials/front-nav.php'; ?>
 
     <main>
-        <?php $__flashes = flash_get(); ?>
-        <?php if ($__flashes !== []): ?>
+        <?php $flashListe = flash_get(); ?>
+        <?php if ($flashListe !== []): ?>
             <div class="container" style="padding-top:20px;">
-                <?php foreach ($__flashes as $__type => $__message): ?>
-                    <div class="alert alert-<?= e($__type) ?>" data-flash><?= e($__message) ?></div>
+                <?php foreach ($flashListe as $flashType => $flashMessage): ?>
+                    <div class="alert alert-<?= e($flashType) ?>" data-flash><?= e($flashMessage) ?></div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>

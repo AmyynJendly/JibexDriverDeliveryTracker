@@ -19,6 +19,21 @@ final class DashboardController extends Controller
         $coursModel = new Cours();
         $inscriptionModel = new Inscription();
 
+        $totalInscriptions = 0;
+        foreach ($inscriptionModel->countByStatut() as $ligne) {
+            $totalInscriptions += (int) $ligne['total'];
+        }
+
+        $repartitionCategorie = [];
+        foreach ($coursModel->repartitionParCategorie() as $ligne) {
+            $repartitionCategorie[] = ['label' => $ligne['categorie'], 'value' => (int) $ligne['total']];
+        }
+
+        $repartitionRole = [];
+        foreach ($utilisateurModel->repartitionParRole() as $ligne) {
+            $repartitionRole[] = ['label' => role_label($ligne['role']), 'value' => (int) $ligne['total']];
+        }
+
         $this->view('admin/dashboard', [
             'title' => 'Tableau de bord',
             'nbUtilisateurs' => $utilisateurModel->count(),
@@ -26,15 +41,9 @@ final class DashboardController extends Controller
             'nbEtudiants' => $utilisateurModel->countByRole('etudiant'),
             'nbCoursPublies' => $coursModel->count(['statut' => 'publie']),
             'nbCoursBrouillon' => $coursModel->count(['statut' => 'brouillon']),
-            'nbInscriptions' => array_sum(array_column($inscriptionModel->countByStatut(), 'total')),
-            'repartitionCategorie' => array_map(
-                static fn ($row) => ['label' => $row['categorie'], 'value' => (int) $row['total']],
-                $coursModel->repartitionParCategorie()
-            ),
-            'repartitionRole' => array_map(
-                static fn ($row) => ['label' => role_label($row['role']), 'value' => (int) $row['total']],
-                $utilisateurModel->repartitionParRole()
-            ),
+            'nbInscriptions' => $totalInscriptions,
+            'repartitionCategorie' => $repartitionCategorie,
+            'repartitionRole' => $repartitionRole,
             'derniersUtilisateurs' => $utilisateurModel->paginate(5, 0),
         ], 'back');
     }
@@ -47,28 +56,40 @@ final class DashboardController extends Controller
         $inscriptionModel = new Inscription();
         $utilisateurModel = new Utilisateur();
 
+        $coursParStatut = [];
+        foreach ($coursModel->countByStatut() as $ligne) {
+            $label = $ligne['statut'] === 'publie' ? 'Publies' : 'Brouillons';
+            $coursParStatut[] = ['label' => $label, 'value' => (int) $ligne['total']];
+        }
+
+        $inscriptionsParStatut = [];
+        foreach ($inscriptionModel->countByStatut() as $ligne) {
+            if ($ligne['statut'] === 'en_cours') {
+                $label = 'En cours';
+            } elseif ($ligne['statut'] === 'termine') {
+                $label = 'Termine';
+            } else {
+                $label = 'Abandonne';
+            }
+            $inscriptionsParStatut[] = ['label' => $label, 'value' => (int) $ligne['total']];
+        }
+
+        $inscriptionsParMois = [];
+        foreach ($utilisateurModel->inscriptionsParMois() as $ligne) {
+            $inscriptionsParMois[] = ['label' => $ligne['mois'], 'value' => (int) $ligne['total']];
+        }
+
+        $repartitionCategorie = [];
+        foreach ($coursModel->repartitionParCategorie() as $ligne) {
+            $repartitionCategorie[] = ['label' => $ligne['categorie'], 'value' => (int) $ligne['total']];
+        }
+
         $this->view('admin/statistiques', [
             'title' => 'Statistiques',
-            'coursParStatut' => array_map(
-                static fn ($row) => ['label' => $row['statut'] === 'publie' ? 'Publies' : 'Brouillons', 'value' => (int) $row['total']],
-                $coursModel->countByStatut()
-            ),
-            'inscriptionsParStatut' => array_map(
-                static fn ($row) => ['label' => match ($row['statut']) {
-                    'en_cours' => 'En cours',
-                    'termine' => 'Termine',
-                    default => 'Abandonne',
-                }, 'value' => (int) $row['total']],
-                $inscriptionModel->countByStatut()
-            ),
-            'inscriptionsParMois' => array_map(
-                static fn ($row) => ['label' => $row['mois'], 'value' => (int) $row['total']],
-                $utilisateurModel->inscriptionsParMois()
-            ),
-            'repartitionCategorie' => array_map(
-                static fn ($row) => ['label' => $row['categorie'], 'value' => (int) $row['total']],
-                $coursModel->repartitionParCategorie()
-            ),
+            'coursParStatut' => $coursParStatut,
+            'inscriptionsParStatut' => $inscriptionsParStatut,
+            'inscriptionsParMois' => $inscriptionsParMois,
+            'repartitionCategorie' => $repartitionCategorie,
         ], 'back');
     }
 }

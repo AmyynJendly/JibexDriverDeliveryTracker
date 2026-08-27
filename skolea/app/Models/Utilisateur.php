@@ -7,10 +7,7 @@ namespace App\Models;
 use App\Core\Database;
 use PDO;
 
-/**
- * Acces aux donnees de la table `utilisateurs`.
- * Couvre l'authentification et la gestion des comptes par l'administrateur.
- */
+// Acces aux donnees de la table utilisateurs.
 final class Utilisateur
 {
     private PDO $pdo;
@@ -118,10 +115,7 @@ final class Utilisateur
         $stmt->execute(['id' => $id]);
     }
 
-    /**
-     * Liste paginee des utilisateurs pour le back-office administrateur,
-     * avec filtre optionnel par role et recherche sur nom/prenom/email.
-     */
+    // Liste paginee, avec filtre optionnel par role et recherche nom/prenom/email.
     public function paginate(int $limit, int $offset, ?string $role = null, ?string $recherche = null): array
     {
         [$where, $params] = $this->buildFiltre($role, $recherche);
@@ -183,19 +177,13 @@ final class Utilisateur
         return (int) $stmt->fetchColumn();
     }
 
-    /**
-     * Utilisateurs ayant le role formateur, utilise pour peupler les listes
-     * deroulantes (ex : affectation d'un cours) et les filtres.
-     */
+    // Liste des formateurs, pour remplir les listes deroulantes.
     public function formateurs(): array
     {
         return $this->pdo->query("SELECT id, nom, prenom FROM utilisateurs WHERE role = 'formateur' ORDER BY nom")->fetchAll();
     }
 
-    /**
-     * Repartition du nombre de comptes par role, utilisee sur le
-     * tableau de bord administrateur.
-     */
+    // Nombre de comptes par role, pour le tableau de bord admin.
     public function repartitionParRole(): array
     {
         return $this->pdo->query('SELECT role, COUNT(*) AS total FROM utilisateurs GROUP BY role')->fetchAll();

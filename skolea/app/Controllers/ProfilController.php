@@ -9,10 +9,7 @@ use App\Core\Controller;
 use App\Core\Validator;
 use App\Models\Utilisateur;
 
-/**
- * Page de profil, commune aux trois roles (le layout utilise s'adapte
- * en fonction du role de l'utilisateur connecte).
- */
+// Page de profil, commune aux trois roles (le layout change selon le role).
 final class ProfilController extends Controller
 {
     public function show(): void

@@ -1,11 +1,7 @@
-/**
- * Validation cote client des formulaires marques [data-validate].
- * Chaque champ declare ses regles via l'attribut data-rule
- * (ex: data-rule="required|email" ou data-rule="required|min:8").
- * Les formulaires portent l'attribut novalidate : la validation HTML5
- * native (required, pattern, ...) n'est pas utilisee, tout passe par
- * ce script (et, dans tous les cas, par une revalidation cote PHP).
- */
+// Validation cote client des formulaires marques [data-validate].
+// Chaque champ declare ses regles avec data-rule, ex: "required|email".
+// Les formulaires ont l'attribut novalidate (pas de validation HTML native),
+// et les donnees sont de toute facon revalidees cote PHP.
 (function () {
   'use strict';
 

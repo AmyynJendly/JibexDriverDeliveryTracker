@@ -94,10 +94,7 @@ final class Cours
         return (int) $stmt->fetchColumn() > 0;
     }
 
-    /**
-     * Liste paginee pour le catalogue public et le back-office, avec filtres
-     * optionnels par categorie, niveau, formateur, statut et recherche texte.
-     */
+    // Liste paginee avec filtres optionnels (categorie, niveau, formateur, statut, recherche).
     public function paginate(int $limit, int $offset, array $filtres = []): array
     {
         [$where, $params] = $this->buildFiltre($filtres);
@@ -178,10 +175,7 @@ final class Cours
         return $this->pdo->query('SELECT statut, COUNT(*) AS total FROM cours GROUP BY statut')->fetchAll();
     }
 
-    /**
-     * Nombre de cours par categorie (cours publies uniquement), utilise pour
-     * le graphique de repartition du tableau de bord administrateur.
-     */
+    // Nombre de cours publies par categorie, pour le tableau de bord.
     public function repartitionParCategorie(): array
     {
         return $this->pdo->query("

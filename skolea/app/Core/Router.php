@@ -4,14 +4,10 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Routeur minimaliste : associe une methode HTTP + un chemin
- * (avec parametres dynamiques du type /cours/{id}) a une action
- * de controleur, sans dependre d'un framework externe.
- */
+// Routeur simple : associe une methode HTTP + un chemin (avec parametres
+// du type /cours/{id}) a une methode de controleur.
 final class Router
 {
-    /** @var array<int, array{method: string, pattern: string, keys: array<int, string>, handler: array{0: class-string, 1: string}}> */
     private array $routes = [];
 
     public function get(string $path, array $handler): void
@@ -26,12 +22,10 @@ final class Router
 
     private function add(string $method, string $path, array $handler): void
     {
-        $keys = [];
-        $regex = preg_replace_callback('#\{([a-zA-Z_][a-zA-Z0-9_]*)\}#', function ($matches) use (&$keys) {
-            $keys[] = $matches[1];
+        preg_match_all('#\{([a-zA-Z_][a-zA-Z0-9_]*)\}#', $path, $matches);
+        $keys = $matches[1];
 
-            return '([^/]+)';
-        }, $path);
+        $regex = preg_replace('#\{[a-zA-Z_][a-zA-Z0-9_]*\}#', '([^/]+)', $path);
 
         $this->routes[] = [
             'method'  => $method,
@@ -72,12 +66,17 @@ final class Router
             }
         }
 
+        $this->afficher404();
+    }
+
+    private function afficher404(): void
+    {
         http_response_code(404);
-        (new class extends Controller {
-            public function notFound(): void
-            {
-                $this->view('errors/404', [], 'front');
-            }
-        })->notFound();
+
+        ob_start();
+        require dirname(__DIR__) . '/Views/errors/404.php';
+        $content = ob_get_clean();
+
+        require dirname(__DIR__) . '/Views/layouts/front.php';
     }
 }

@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-/**
- * Table de routage de l'application.
- * @var App\Core\Router $router
- */
+// Table de routage : $router vient de public/index.php.
 
 use App\Controllers\Admin\CategorieController as AdminCategorieController;
 use App\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -20,12 +17,11 @@ use App\Controllers\Formateur\RessourceController as FormateurRessourceControlle
 use App\Controllers\ProfilController;
 use App\Controllers\SiteController;
 
-// Les routes sont enregistrees au fur et a mesure que les controleurs
-// sont developpes (site public, authentification, back-office, ...).
-
+// --- Site public ---
 $router->get('/', [SiteController::class, 'home']);
 $router->get('/a-propos', [SiteController::class, 'about']);
 
+// --- Connexion / inscription ---
 $router->get('/connexion', [AuthController::class, 'showLogin']);
 $router->post('/connexion', [AuthController::class, 'login']);
 $router->get('/inscription', [AuthController::class, 'showRegister']);

@@ -4,16 +4,9 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Gestion de la session utilisateur et des roles (administrateur,
- * formateur, etudiant). Toute l'authentification passe par cette classe.
- */
+// Gestion de la session utilisateur connecte (login, logout, role).
 final class Auth
 {
-    private function __construct()
-    {
-    }
-
     public static function login(array $utilisateur): void
     {
         if (!headers_sent()) {
@@ -62,10 +55,7 @@ final class Auth
         return self::check() && in_array(self::role(), $roles, true);
     }
 
-    /**
-     * Met a jour les informations affichees en session (apres modification
-     * de profil) sans devoir se reconnecter.
-     */
+    // Met a jour la session apres modification du profil, sans se reconnecter.
     public static function refresh(array $utilisateur): void
     {
         if (self::check()) {

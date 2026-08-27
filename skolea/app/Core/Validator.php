@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Validation des donnees cote serveur (obligatoire meme quand une
- * validation JS existe deja cote client, le formulaire pouvant etre
- * soumis sans JavaScript ou avec des donnees falsifiees).
- */
+// Validation cote serveur des formulaires (verifiee en plus du JS,
+// au cas ou JavaScript serait desactive).
 final class Validator
 {
     private array $data;
@@ -94,10 +91,7 @@ final class Validator
         return $this;
     }
 
-    /**
-     * Permet d'ajouter une erreur issue d'une regle metier externe
-     * (ex : email deja utilise, verifie via une requete PDO).
-     */
+    // Pour ajouter une erreur "manuelle" (ex: email deja utilise en base).
     public function addError(string $field, string $message): self
     {
         $this->errors[$field] ??= $message;

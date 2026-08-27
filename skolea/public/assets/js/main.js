@@ -1,7 +1,5 @@
-/**
- * Interactions generales de l'interface (menu mobile, sidebar back-office,
- * menu utilisateur, fermeture automatique des messages flash).
- */
+// Interactions generales : menu mobile, sidebar back-office,
+// menu utilisateur, fermeture automatique des messages flash.
 document.addEventListener('DOMContentLoaded', function () {
   var header = document.querySelector('.site-header');
   var navToggle = document.querySelector('.nav-toggle');

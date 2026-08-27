@@ -210,9 +210,7 @@ final class CoursController extends Controller
         return $cours;
     }
 
-    /**
-     * @return array{0: array<string, string>, 1: Validator}
-     */
+    // Retourne [donnees du formulaire, validateur rempli].
     private function validerFormulaire(): array
     {
         $data = [

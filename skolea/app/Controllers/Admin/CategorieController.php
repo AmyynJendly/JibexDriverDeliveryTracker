@@ -128,9 +128,7 @@ final class CategorieController extends Controller
         $this->redirect('/admin/categories');
     }
 
-    /**
-     * @return array{0: array<string, string>, 1: Validator}
-     */
+    // Retourne [donnees du formulaire, validateur rempli].
     private function validerFormulaire(?int $idActuel = null): array
     {
         $data = [

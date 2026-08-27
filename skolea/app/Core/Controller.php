@@ -4,19 +4,10 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Classe de base heritee par tous les controleurs de l'application.
- * Regroupe le rendu des vues, les redirections et les controles d'acces.
- */
+// Classe de base pour tous les controleurs : affichage des vues,
+// redirections et controles d'acces (connexion, role, CSRF).
 abstract class Controller
 {
-    /**
-     * Affiche une vue dans une mise en page (layout).
-     *
-     * @param string      $view   chemin de la vue, relatif a app/Views, sans extension
-     * @param array       $data   variables rendues disponibles dans la vue
-     * @param string|null $layout 'front', 'back', ou null pour un rendu sans layout
-     */
     protected function view(string $view, array $data = [], ?string $layout = 'front'): void
     {
         $viewFile = dirname(__DIR__) . '/Views/' . $view . '.php';
@@ -42,13 +33,13 @@ abstract class Controller
         require $layoutFile;
     }
 
-    protected function redirect(string $path): never
+    protected function redirect(string $path): void
     {
         header('Location: ' . url($path));
         exit;
     }
 
-    protected function back(): never
+    protected function back(): void
     {
         $referer = $_SERVER['HTTP_REFERER'] ?? url('/');
         header('Location: ' . $referer);
@@ -67,9 +58,7 @@ abstract class Controller
         return is_string($value) ? trim($value) : $value;
     }
 
-    /**
-     * Interrompt l'action si l'utilisateur n'est pas connecte.
-     */
+    // Redirige vers la page de connexion si l'utilisateur n'est pas connecte.
     protected function requireAuth(): void
     {
         if (!Auth::check()) {
@@ -78,9 +67,7 @@ abstract class Controller
         }
     }
 
-    /**
-     * Interrompt l'action si l'utilisateur n'a pas l'un des roles autorises.
-     */
+    // Bloque l'action si l'utilisateur n'a pas l'un des roles autorises.
     protected function requireRole(string ...$roles): void
     {
         $this->requireAuth();
@@ -92,9 +79,7 @@ abstract class Controller
         }
     }
 
-    /**
-     * Verifie le jeton CSRF envoye par un formulaire POST.
-     */
+    // Verifie le jeton CSRF envoye par un formulaire POST.
     protected function verifyCsrf(): void
     {
         $token = (string) $this->input('_csrf', '');

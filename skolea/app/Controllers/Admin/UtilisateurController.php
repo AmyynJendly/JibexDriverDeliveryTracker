@@ -53,7 +53,7 @@ final class UtilisateurController extends Controller
         $this->requireRole('administrateur');
         $this->verifyCsrf();
 
-        [$data, $errors] = $this->validerFormulaire(creation: true);
+        [$data, $errors] = $this->validerFormulaire(true);
 
         if ($errors->fails()) {
             $this->view('admin/utilisateurs/form', [
@@ -88,6 +88,8 @@ final class UtilisateurController extends Controller
         $utilisateur = (new Utilisateur())->findById((int) $id);
         if (!$utilisateur) {
             $this->redirectAvecErreur();
+
+            return;
         }
 
         $this->view('admin/utilisateurs/form', [
@@ -108,9 +110,11 @@ final class UtilisateurController extends Controller
         $utilisateur = $model->findById($idInt);
         if (!$utilisateur) {
             $this->redirectAvecErreur();
+
+            return;
         }
 
-        [$data, $errors] = $this->validerFormulaire(creation: false, idActuel: $idInt);
+        [$data, $errors] = $this->validerFormulaire(false, $idInt);
 
         if ($errors->fails()) {
             $this->view('admin/utilisateurs/form', [
@@ -159,9 +163,7 @@ final class UtilisateurController extends Controller
         $this->redirect('/admin/utilisateurs');
     }
 
-    /**
-     * @return array{0: array<string, string>, 1: Validator}
-     */
+    // Retourne [donnees du formulaire, validateur rempli].
     private function validerFormulaire(bool $creation, ?int $idActuel = null): array
     {
         $data = [
@@ -195,7 +197,7 @@ final class UtilisateurController extends Controller
         return [$data, $validator];
     }
 
-    private function redirectAvecErreur(): never
+    private function redirectAvecErreur(): void
     {
         flash_set('erreur', 'Utilisateur introuvable.');
         $this->redirect('/admin/utilisateurs');

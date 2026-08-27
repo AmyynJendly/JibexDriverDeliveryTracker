@@ -9,17 +9,17 @@ use App\Core\Controller;
 use App\Core\Validator;
 use App\Models\Utilisateur;
 
-/**
- * Inscription, connexion et deconnexion.
- * L'inscription publique ne cree que des comptes etudiant : les comptes
- * formateur et administrateur sont crees par un administrateur.
- */
+// Inscription, connexion et deconnexion. L'inscription publique ne cree
+// que des comptes etudiant : formateur et administrateur sont crees par
+// un administrateur depuis le back-office.
 final class AuthController extends Controller
 {
     public function showLogin(): void
     {
         if (Auth::check()) {
             $this->redirectSelonRole();
+
+            return;
         }
 
         $this->view('auth/login', ['title' => 'Connexion', 'old' => [], 'errors' => []]);
@@ -67,6 +67,8 @@ final class AuthController extends Controller
     {
         if (Auth::check()) {
             $this->redirectSelonRole();
+
+            return;
         }
 
         $this->view('auth/register', ['title' => 'Creer un compte', 'old' => [], 'errors' => []]);
@@ -131,12 +133,16 @@ final class AuthController extends Controller
         $this->redirect('/connexion');
     }
 
-    private function redirectSelonRole(): never
+    private function redirectSelonRole(): void
     {
-        $this->redirect(match (Auth::role()) {
-            'administrateur' => '/admin',
-            'formateur' => '/formateur',
-            default => '/mes-cours',
-        });
+        $role = Auth::role();
+
+        if ($role === 'administrateur') {
+            $this->redirect('/admin');
+        } elseif ($role === 'formateur') {
+            $this->redirect('/formateur');
+        } else {
+            $this->redirect('/mes-cours');
+        }
     }
 }

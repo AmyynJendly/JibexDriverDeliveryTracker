@@ -1,9 +1,14 @@
 <?php
-/**
- * @var array<int, array{label: string, value: int}> $items
- * @var int|null $max
- */
-$max ??= max(1, ...array_map(static fn ($item) => (int) $item['value'], $items ?: [['value' => 0]]));
+// $items : liste de ['label' => ..., 'value' => ...] a afficher en barres.
+// $max : valeur de reference pour la largeur des barres (calculee si absente).
+if ($max === null) {
+    $max = 1;
+    foreach ($items as $item) {
+        if ((int) $item['value'] > $max) {
+            $max = (int) $item['value'];
+        }
+    }
+}
 ?>
 <div class="bar-list">
     <?php if ($items === []): ?>

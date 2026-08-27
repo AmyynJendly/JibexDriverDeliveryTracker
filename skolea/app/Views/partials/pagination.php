@@ -1,6 +1,3 @@
-<?php
-/** @var \App\Core\Paginator $paginator */
-?>
 <?php if ($paginator->totalPages > 1): ?>
     <nav class="pagination" aria-label="Pagination">
         <a href="<?= e(query_with(['page' => $paginator->page - 1])) ?>"

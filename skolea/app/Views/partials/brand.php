@@ -1,5 +1,5 @@
 <?php
-/** @var string $variant 'clair' (fond sombre) ou 'sombre' (fond clair) */
+// $variant = 'clair' pour un logo blanc (fond sombre, ex: sidebar admin).
 $variant ??= 'sombre';
 $fill = $variant === 'clair' ? '#ffffff' : '#2A2F6D';
 ?>

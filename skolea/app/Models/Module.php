@@ -24,10 +24,7 @@ final class Module
         return $stmt->fetch() ?: null;
     }
 
-    /**
-     * Recupere un module avec les informations du cours parent (utilise pour
-     * verifier qu'un formateur est bien proprietaire du module).
-     */
+    // Module + infos du cours parent, pour verifier que le formateur en est proprietaire.
     public function findAvecCours(int $id): ?array
     {
         $stmt = $this->pdo->prepare('

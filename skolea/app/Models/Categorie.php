@@ -21,10 +21,7 @@ final class Categorie
         return $this->pdo->query('SELECT * FROM categories ORDER BY nom')->fetchAll();
     }
 
-    /**
-     * Toutes les categories avec le nombre de cours qui leur sont rattaches,
-     * utilisee sur la page d'administration des categories.
-     */
+    // Toutes les categories avec le nombre de cours rattaches a chacune.
     public function allWithCoursCount(): array
     {
         return $this->pdo->query('
@@ -81,10 +78,7 @@ final class Categorie
         ]);
     }
 
-    /**
-     * @throws \PDOException si des cours referencent encore cette categorie
-     *                        (contrainte ON DELETE RESTRICT)
-     */
+    // Echoue si des cours utilisent encore cette categorie (contrainte de la base).
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare('DELETE FROM categories WHERE id = :id');

@@ -83,7 +83,7 @@ final class RessourceController extends Controller
         $this->verifyCsrf();
 
         $ressource = $this->recupererRessourceOuBloquer((int) $id);
-        [$data, $validator, $contenu] = $this->validerFormulaire(obligatoire: false);
+        [$data, $validator, $contenu] = $this->validerFormulaire(false);
 
         if ($validator->fails()) {
             $this->view('formateur/ressources/form', [
@@ -144,9 +144,7 @@ final class RessourceController extends Controller
         return $ressource;
     }
 
-    /**
-     * @return array{0: array<string, string>, 1: Validator, 2: ?string}
-     */
+    // Retourne [donnees du formulaire, validateur, contenu final (fichier ou URL)].
     private function validerFormulaire(bool $obligatoire = true): array
     {
         $data = [

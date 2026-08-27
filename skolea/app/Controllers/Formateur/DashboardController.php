@@ -20,7 +20,16 @@ final class DashboardController extends Controller
         $inscriptionModel = new Inscription();
 
         $cours = $coursModel->paginate(5, 0, ['formateur_id' => $formateurId]);
-        $nbInscriptionsTotal = array_sum(array_map(static fn ($c) => (int) $c['nb_inscrits'], $cours));
+
+        $nbInscriptionsTotal = 0;
+        foreach ($cours as $c) {
+            $nbInscriptionsTotal += (int) $c['nb_inscrits'];
+        }
+
+        $repartitionInscriptions = [];
+        foreach ($inscriptionModel->repartitionParCoursPourFormateur($formateurId) as $ligne) {
+            $repartitionInscriptions[] = ['label' => $ligne['titre'], 'value' => (int) $ligne['total']];
+        }
 
         $this->view('formateur/dashboard', [
             'title' => 'Tableau de bord',
@@ -29,10 +38,7 @@ final class DashboardController extends Controller
             'nbCoursBrouillon' => $coursModel->count(['formateur_id' => $formateurId, 'statut' => 'brouillon']),
             'nbInscriptionsTotal' => $nbInscriptionsTotal,
             'derniersCours' => $cours,
-            'repartitionInscriptions' => array_map(
-                static fn ($row) => ['label' => $row['titre'], 'value' => (int) $row['total']],
-                $inscriptionModel->repartitionParCoursPourFormateur($formateurId)
-            ),
+            'repartitionInscriptions' => $repartitionInscriptions,
         ], 'back');
     }
 
@@ -44,12 +50,14 @@ final class DashboardController extends Controller
         $inscriptionModel = new Inscription();
         $coursModel = new Cours();
 
+        $repartitionInscriptions = [];
+        foreach ($inscriptionModel->repartitionParCoursPourFormateur($formateurId) as $ligne) {
+            $repartitionInscriptions[] = ['label' => $ligne['titre'], 'value' => (int) $ligne['total']];
+        }
+
         $this->view('formateur/statistiques', [
             'title' => 'Statistiques',
-            'repartitionInscriptions' => array_map(
-                static fn ($row) => ['label' => $row['titre'], 'value' => (int) $row['total']],
-                $inscriptionModel->repartitionParCoursPourFormateur($formateurId)
-            ),
+            'repartitionInscriptions' => $repartitionInscriptions,
             'coursParStatut' => [
                 ['label' => 'Publies', 'value' => $coursModel->count(['formateur_id' => $formateurId, 'statut' => 'publie'])],
                 ['label' => 'Brouillons', 'value' => $coursModel->count(['formateur_id' => $formateurId, 'statut' => 'brouillon'])],

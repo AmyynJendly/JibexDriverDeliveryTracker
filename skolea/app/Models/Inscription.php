@@ -56,10 +56,7 @@ final class Inscription
         INNER JOIN utilisateurs u ON u.id = c.formateur_id
     ";
 
-    /**
-     * Cours suivis par un etudiant, avec les informations du cours et du
-     * formateur (jointure sur cours, categories et utilisateurs).
-     */
+    // Cours suivis par un etudiant, avec les infos du cours et du formateur.
     public function paginateByEtudiant(int $etudiantId, int $limit, int $offset): array
     {
         $stmt = $this->pdo->prepare(
@@ -73,10 +70,7 @@ final class Inscription
         return $stmt->fetchAll();
     }
 
-    /**
-     * Meme jointure que paginateByEtudiant() mais pour une seule inscription,
-     * utilisee sur la page de suivi d'un cours.
-     */
+    // Meme requete que paginateByEtudiant() mais pour une seule inscription.
     public function trouverDetailleeParEtudiantEtCours(int $etudiantId, int $coursId): ?array
     {
         $stmt = $this->pdo->prepare(self::SELECT_DETAILLEE . ' WHERE i.etudiant_id = :etudiant_id AND i.cours_id = :cours_id');
@@ -93,9 +87,7 @@ final class Inscription
         return (int) $stmt->fetchColumn();
     }
 
-    /**
-     * Etudiants inscrits a un cours, pour la vue "participants" du formateur.
-     */
+    // Etudiants inscrits a un cours (vue "participants" du formateur).
     public function byCours(int $coursId): array
     {
         $stmt = $this->pdo->prepare('
@@ -118,10 +110,7 @@ final class Inscription
         return (int) $stmt->fetchColumn();
     }
 
-    /**
-     * Bascule l'etat "termine" d'un module pour une inscription et recalcule
-     * automatiquement la progression (%) et le statut de l'inscription.
-     */
+    // Coche/decoche un module termine et recalcule la progression (%) et le statut.
     public function basculerModule(array $inscription, int $moduleId, int $totalModules): void
     {
         $termines = $inscription['modules_termines'] !== null && $inscription['modules_termines'] !== ''
@@ -135,10 +124,7 @@ final class Inscription
         }
 
         $progression = $totalModules > 0 ? (int) round((count($termines) / $totalModules) * 100) : 0;
-        $statut = match (true) {
-            $progression >= 100 => 'termine',
-            default => 'en_cours',
-        };
+        $statut = $progression >= 100 ? 'termine' : 'en_cours';
 
         $stmt = $this->pdo->prepare('
             UPDATE inscriptions
@@ -158,10 +144,7 @@ final class Inscription
         return $this->pdo->query('SELECT statut, COUNT(*) AS total FROM inscriptions GROUP BY statut')->fetchAll();
     }
 
-    /**
-     * Nombre d'inscriptions par cours pour un formateur donne, utilise sur
-     * son tableau de statistiques.
-     */
+    // Nombre d'inscriptions par cours pour un formateur donne.
     public function repartitionParCoursPourFormateur(int $formateurId): array
     {
         $stmt = $this->pdo->prepare('

@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-/**
- * Point d'entree unique de l'application (front controller).
- * Toutes les requetes sont redirigees ici par le fichier .htaccess.
- */
+// Point d'entree unique de l'application. Toutes les requetes arrivent
+// ici grace au fichier .htaccess, qui redirige tout vers index.php.
 
 session_start();
 

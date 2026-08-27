@@ -8,10 +8,7 @@ use PDO;
 use PDOException;
 use RuntimeException;
 
-/**
- * Acces unique a la base de donnees via PDO (interface unique autorisee,
- * aucune requete MySQLi n'est utilisee dans l'application).
- */
+// Connexion PDO unique a la base de donnees (pas de MySQLi).
 final class Database
 {
     private static ?PDO $instance = null;

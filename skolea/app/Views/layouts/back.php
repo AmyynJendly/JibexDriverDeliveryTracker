@@ -1,7 +1,4 @@
-<?php
-/** @var string $content */
-$title ??= 'Tableau de bord';
-?>
+<?php $title ??= 'Tableau de bord'; ?>
 <!doctype html>
 <html lang="fr">
 <head>

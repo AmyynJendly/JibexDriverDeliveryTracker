@@ -9,9 +9,7 @@ use App\Models\Categorie;
 use App\Models\Cours;
 use App\Models\Utilisateur;
 
-/**
- * Pages publiques generales (accueil, a propos).
- */
+// Pages publiques generales (accueil, a propos).
 final class SiteController extends Controller
 {
     public function home(): void

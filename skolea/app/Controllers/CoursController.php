@@ -12,10 +12,8 @@ use App\Models\Cours;
 use App\Models\Inscription;
 use App\Models\Module;
 
-/**
- * Catalogue public des cours (consultation libre, l'inscription
- * necessite d'etre connecte en tant qu'etudiant).
- */
+// Catalogue public des cours. La consultation est libre, mais il faut
+// etre connecte en tant qu'etudiant pour s'inscrire.
 final class CoursController extends Controller
 {
     private const PAR_PAGE = 6;

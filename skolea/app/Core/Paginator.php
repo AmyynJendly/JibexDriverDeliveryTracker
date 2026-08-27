@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Calcule les informations de pagination (offset, nombre de pages, ...)
- * utilisees a la fois par les modeles (LIMIT/OFFSET) et par les vues
- * (affichage des liens de pagination).
- */
+// Calcule la page courante, l'offset et le nombre total de pages
+// pour les listes (cours, utilisateurs...).
 final class Paginator
 {
-    public readonly int $page;
-    public readonly int $parPage;
-    public readonly int $total;
-    public readonly int $totalPages;
-    public readonly int $offset;
+    public int $page;
+    public int $parPage;
+    public int $total;
+    public int $totalPages;
+    public int $offset;
 
     public function __construct(int $pageDemandee, int $parPage, int $total)
     {

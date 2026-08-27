@@ -24,10 +24,7 @@ final class Ressource
         return $stmt->fetch() ?: null;
     }
 
-    /**
-     * Recupere une ressource avec les informations du module et du cours
-     * parents (utilise pour verifier la propriete par un formateur).
-     */
+    // Ressource + infos du module/cours parents, pour verifier le proprietaire.
     public function findAvecCours(int $id): ?array
     {
         $stmt = $this->pdo->prepare('

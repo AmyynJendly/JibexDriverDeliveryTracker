@@ -4,22 +4,12 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-/**
- * Gestion minimale des televersements de fichiers (image de cours,
- * documents de ressources), avec controle d'extension et de taille.
- */
+// Deplace un fichier televerse vers public/uploads/{dossier}/, avec
+// controle d'extension et de taille.
 final class Upload
 {
-    /**
-     * Deplace un fichier televerse vers public/uploads/{dossier}/ et
-     * retourne le chemin relatif stocke (ex: "cours/64f...jpg"), ou null
-     * si aucun fichier n'a ete fourni.
-     *
-     * @param array<string, mixed> $fichier   une entree de $_FILES
-     * @param string[]             $extensionsAutorisees
-     *
-     * @throws \RuntimeException si le fichier est invalide
-     */
+    // $fichier est une entree de $_FILES. Retourne le chemin relatif stocke
+    // (ex: "cours/64f...jpg"), ou null si aucun fichier n'a ete envoye.
     public static function stocker(array $fichier, string $dossier, array $extensionsAutorisees, int $tailleMaxOctets): ?string
     {
         if (!isset($fichier['error']) || $fichier['error'] === UPLOAD_ERR_NO_FILE) {

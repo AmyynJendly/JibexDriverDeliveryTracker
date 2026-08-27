@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 use App\Core\Auth;
 
-/**
- * Fonctions utilitaires globales chargees par le point d'entree public/index.php.
- * Regroupees ici pour eviter de repeter la meme logique dans chaque vue/controleur.
- */
+// Petites fonctions utilitaires utilisees dans les vues et les controleurs.
 
 function base_path(): string
 {
@@ -128,15 +125,18 @@ function current_user(): ?array
     return Auth::user();
 }
 
-/**
- * Construit une chaine de requete (?a=1&b=2) en conservant les parametres
- * actuels de l'URL et en ecrasant ceux fournis, utile pour les liens de
- * pagination combines a un filtre de recherche.
- */
+// Reconstruit l'URL courante (?a=1&b=2) en gardant les parametres actuels
+// et en ecrasant ceux passes en argument. Utilise pour les liens de pagination.
 function query_with(array $overrides): string
 {
     $params = array_merge($_GET, $overrides);
-    $params = array_filter($params, static fn ($value) => $value !== null && $value !== '');
 
-    return '?' . http_build_query($params);
+    $propres = [];
+    foreach ($params as $cle => $valeur) {
+        if ($valeur !== null && $valeur !== '') {
+            $propres[$cle] = $valeur;
+        }
+    }
+
+    return '?' . http_build_query($propres);
 }
